@@ -80,6 +80,7 @@
         button{padding:11px 17px;border:none;border-radius:9px;font-weight:800;cursor:pointer;transition:.18s}
         .btn-save{background:linear-gradient(135deg,#0571ee,#05abff);color:#fff}
         .btn-save:hover{filter:brightness(1.05)}
+        .btn-save:disabled{opacity:.6;cursor:not-allowed}
         .btn-new{background:#64748b;color:#fff}
         .btn-new:hover{background:#475569}
         
@@ -91,6 +92,10 @@
         .btn-open{background:#e7f2ff;color:#0565c9}
         .btn-delete{background:#feecec;color:#b91c1c}
         .btn-pdf-small{background:#fff3d6;color:#9a6500}
+
+        .cloud-status{display:inline-flex;align-items:center;gap:6px;font-size:0.74rem;font-weight:700;color:#047857;background:#d1fae5;padding:4px 10px;border-radius:999px;margin-bottom:10px}
+        .cloud-status.connecting{color:#b45309;background:#fef3c7}
+        .cloud-status.error{color:#b91c1c;background:#fee2e2}
 
         .search-box{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:10px;font-size:0.85rem;outline:none;background:#fff;font-family:inherit}
         .search-box:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(5,113,238,.10)}
@@ -238,7 +243,10 @@
         </div>
 
         <div class="history-container">
-            <h2>Processos Salvos</h2>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+                <h2 style="margin:0">Processos Salvos</h2>
+                <span class="cloud-status connecting" id="cloud-status-badge">⏳ Conectando...</span>
+            </div>
             <input type="text" id="history-search" class="search-box" placeholder="🔍 Pesquisar protocolo, secretaria ou título..." oninput="renderHistory()">
             <div class="status-filters" id="status-filters">
                 <button type="button" class="filter-chip active" data-filter="Todos" onclick="setStatusFilter('Todos', this)">Todos</button>
@@ -302,6 +310,63 @@
             </div>
         </div>
     </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { 
+            getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy 
+        } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAPYyVcSPwI30-VWHDKQkJJikvb2k5SJQ",
+            authDomain: "checklist-semagi.firebaseapp.com",
+            projectId: "checklist-semagi",
+            storageBucket: "checklist-semagi.firebasestorage.app",
+            messagingSenderId: "745465206175",
+            appId: "1:745465206175:web:c459fc87e9b3f79bbb19aa"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const processosRef = collection(db, "processos_checklist");
+
+        window.cloudHistory = [];
+
+        const q = query(processosRef, orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            window.cloudHistory = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            const badge = document.getElementById('cloud-status-badge');
+            if (badge) {
+                badge.className = 'cloud-status';
+                badge.textContent = '☁️ Sincronizado';
+            }
+            if (typeof window.renderHistory === 'function') {
+                window.renderHistory();
+            }
+        }, (error) => {
+            console.error("Erro ao sincronizar com o banco:", error);
+            const badge = document.getElementById('cloud-status-badge');
+            if (badge) {
+                badge.className = 'cloud-status error';
+                badge.textContent = '⚠️ Erro no Banco';
+            }
+        });
+
+        window.cloudSaveRecord = async (record) => {
+            await setDoc(doc(db, "processos_checklist", record.id), record);
+        };
+
+        window.cloudUpdateStatus = async (id, newStatus) => {
+            await updateDoc(doc(db, "processos_checklist", id), { status: newStatus });
+        };
+
+        window.cloudDeleteRecord = async (id) => {
+            await deleteDoc(doc(db, "processos_checklist", id));
+        };
+    </script>
 
     <script>
         const checklistsConfig = {
@@ -952,7 +1017,6 @@
                 row.appendChild(dateInput);
             }
 
-            // Botão e campo de Observação individual em cada item
             const obsButton = document.createElement('button');
             obsButton.type = 'button';
             obsButton.className = 'observation-toggle';
@@ -983,7 +1047,6 @@
             container.appendChild(row);
         }
 
-        // Funções do Modal de Adicionar Cotação
         function openAddQuoteModal() {
             document.getElementById('quote-supplier').value = '';
             document.getElementById('quote-start-date').value = '';
@@ -1222,7 +1285,7 @@
             printWin.document.close();
         }
 
-        function saveData() {
+        async function saveData() {
             const title = document.getElementById('doc-title').value;
             const formData = {};
 
@@ -1248,18 +1311,22 @@
                 });
             });
 
-            let history = JSON.parse(localStorage.getItem('checklist_proc_history')) || [];
+            const history = window.cloudHistory || [];
             let existingStatus = 'Em andamento';
+            let createdAt = Date.now();
 
             if (currentEditingId) {
                 const existingRecord = history.find(h => h.id === currentEditingId);
-                if (existingRecord && existingRecord.status) {
-                    existingStatus = existingRecord.status;
+                if (existingRecord) {
+                    if (existingRecord.status) existingStatus = existingRecord.status;
+                    if (existingRecord.createdAt) createdAt = existingRecord.createdAt;
                 }
             }
 
+            const recordId = currentEditingId || Date.now().toString();
             const record = {
-                id: currentEditingId || Date.now().toString(),
+                id: recordId,
+                createdAt: createdAt,
                 title: title,
                 checklistKey: currentChecklistKey,
                 date: new Date().toLocaleString('pt-BR'),
@@ -1268,24 +1335,30 @@
                 quotes: JSON.parse(JSON.stringify(currentQuotes))
             };
 
-            if (currentEditingId) {
-                const index = history.findIndex(h => h.id === currentEditingId);
-                if (index !== -1) history[index] = record;
-                else history.unshift(record);
-            } else {
-                history.unshift(record);
-                currentEditingId = record.id;
+            const saveBtn = document.querySelector('.btn-save');
+            try {
+                if (saveBtn) {
+                    saveBtn.disabled = true;
+                    saveBtn.textContent = 'Salvando...';
+                }
+                await window.cloudSaveRecord(record);
+                currentEditingId = recordId;
+                alert('Questionário salvo com sucesso!');
+            } catch (e) {
+                console.error(e);
+                alert('Erro ao salvar na nuvem: ' + e.message);
+            } finally {
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Salvar Registro';
+                }
             }
-
-            localStorage.setItem('checklist_proc_history', JSON.stringify(history));
-            alert('Questionário salvo com sucesso!');
-            renderHistory();
         }
 
         function renderHistory() {
             const list = document.getElementById('history-list');
             list.innerHTML = '';
-            const history = JSON.parse(localStorage.getItem('checklist_proc_history')) || [];
+            const history = window.cloudHistory || [];
             const searchTerm = (document.getElementById('history-search')?.value || '').toLowerCase().trim();
 
             const filteredHistory = history.filter(record => {
@@ -1295,7 +1368,7 @@
                 }
 
                 if (!searchTerm) return true;
-                const titleMatch = record.title.toLowerCase().includes(searchTerm);
+                const titleMatch = (record.title || '').toLowerCase().includes(searchTerm);
                 const protoMatch = record.data && record.data['protocolo_numero'] && record.data['protocolo_numero'].toLowerCase().includes(searchTerm);
                 const secMatch = record.data && record.data['secretaria'] && record.data['secretaria'].toLowerCase().includes(searchTerm);
                 return titleMatch || protoMatch || secMatch;
@@ -1397,13 +1470,11 @@
             });
         }
 
-        function updateRecordStatus(id, newStatus) {
-            let history = JSON.parse(localStorage.getItem('checklist_proc_history')) || [];
-            const index = history.findIndex(h => h.id === id);
-            if (index !== -1) {
-                history[index].status = newStatus;
-                localStorage.setItem('checklist_proc_history', JSON.stringify(history));
-                renderHistory();
+        async function updateRecordStatus(id, newStatus) {
+            try {
+                await window.cloudUpdateStatus(id, newStatus);
+            } catch (e) {
+                alert('Erro ao atualizar status: ' + e.message);
             }
         }
 
@@ -1415,13 +1486,14 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function deleteRecord(id) {
-            if (!confirm('Deseja realmente excluir este registro?')) return;
-            let history = JSON.parse(localStorage.getItem('checklist_proc_history')) || [];
-            history = history.filter(item => item.id !== id);
-            localStorage.setItem('checklist_proc_history', JSON.stringify(history));
-            if (currentEditingId === id) clearForm();
-            renderHistory();
+        async function deleteRecord(id) {
+            if (!confirm('Deseja realmente excluir este registro para todos os usuários?')) return;
+            try {
+                await window.cloudDeleteRecord(id);
+                if (currentEditingId === id) clearForm();
+            } catch (e) {
+                alert('Erro ao excluir registro: ' + e.message);
+            }
         }
 
         function clearForm() {
@@ -1439,7 +1511,7 @@
         }
 
         function slugify(text) {
-            return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
+            return text.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, '-');
         }
 
         function exportRecordPDF(record) {
