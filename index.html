@@ -1829,8 +1829,8 @@
     }
 
     function slugify(text) {
-        return text.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, '-');
-    }
+    return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
+}
 
     function exportRecordPDF(record) {
         const formData = record.data || record;
