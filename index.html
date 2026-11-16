@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist - Inexigibilidade e Adesão à ARP</title>
+    <style>
+        :root{--primary:#0571ee;--primary-dark:#045fc7;--secondary:#05abff;--green:#35a853;--yellow:#f6c400;--red:#dc2626;--bg:#f3f7fb;--surface:#fff;--surface-soft:#f5f8fc;--border:#d9e2ec;--text:#19324a;--muted:#66788a;--shadow:0 14px 35px rgba(25,50,74,.10)}
+        *{box-sizing:border-box}body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#eef6ff 0,#f7fafc 45%,#f2f7f5 100%);color:var(--text);margin:0;padding:24px;min-height:100vh}
+        .institutional-header{max-width:1500px;margin:0 auto 18px;background:#fff;border-radius:18px;box-shadow:var(--shadow);overflow:hidden;border:1px solid #e2eaf2}
+        .brand-stripe{height:7px;background:linear-gradient(90deg,var(--primary) 0 55%,var(--secondary) 55% 78%,var(--green) 78% 90%,var(--yellow) 90%)}
+        .brand-content{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px 24px}
+        .brand-left{display:flex;align-items:center;gap:14px}
+        .brand-mark{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:grid;place-items:center;color:#fff;font-weight:900;font-size:18px;box-shadow:0 8px 18px rgba(5,113,238,.22)}
+        .brand-city{font-size:1.05rem;font-weight:900;letter-spacing:.04em;color:#124c8c}
+        .brand-sub{font-size:.72rem;color:var(--muted);margin-top:2px}
+        .semagi{border-left:1px solid #dce5ee;padding-left:24px;text-align:right}
+        .semagi strong{display:block;color:#0571ee;font-size:.98rem}
+        .semagi span{display:block;color:var(--muted);font-size:.76rem;margin-top:3px}
+        
+        .modalidade-selector{max-width:1500px;margin:0 auto 18px;background:#fff;border:1px solid #e2eaf2;border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+        .selector-title{font-size:.85rem;font-weight:800;color:#075da9;margin-bottom:10px}
+        .selector-buttons{display:flex;gap:8px;flex-wrap:wrap}
+        .sel-btn{padding:9px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface-soft);font-weight:750;font-size:0.8rem;color:var(--muted);cursor:pointer;transition:.18s}
+        .sel-btn:hover{border-color:var(--primary);color:var(--primary)}
+        .sel-btn.active{background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(5,113,238,.25)}
+
+        .layout{max-width:1500px;margin:0 auto;display:flex;gap:20px;align-items:flex-start}
+        .app-container,.history-container{background:rgba(255,255,255,.97);border:1px solid #e1e9f1;border-radius:18px;box-shadow:var(--shadow)}
+        .app-container{flex:1 1 850px;padding:28px;overflow:hidden}
+        .history-container{flex:0 1 380px;padding:24px;position:sticky;top:20px}
+        
+        .title-input{width:100%;font-size:clamp(1.15rem,2vw,1.6rem);font-weight:850;border:0;border-bottom:3px solid var(--primary);padding:10px 4px 12px;margin-bottom:22px;background:transparent;color:var(--text);outline:none}
+        h2{margin-top:0;font-size:1.3rem;color:#075da9}
+        h3.section-header{color:#fff;background:linear-gradient(90deg,#0571ee,#05abff);border:0;padding:11px 15px;border-radius:10px;margin:26px 0 7px;box-shadow:0 7px 16px rgba(5,113,238,.16);font-size:.96rem;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+        
+        .btn-header-report{background:#fff;color:#0565c9;border:none;padding:6px 12px;border-radius:8px;font-size:0.76rem;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 6px rgba(0,0,0,0.12);transition:.18s}
+        .btn-header-report:hover{background:#eef7ff;transform:translateY(-1px)}
+        .quote-count-pill{background:#0571ee;color:#fff;padding:2px 7px;border-radius:999px;font-size:0.7rem;font-weight:800}
+
+        .item-row{display:flex;justify-content:space-between;align-items:center;padding:12px 6px;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap;transition:background .2s}
+        .item-row:hover{background:#f7fbff}
+        .item-label{flex:1 1 260px;font-size:.92rem;line-height:1.4}
+        .options-group{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+        .options-group label{font-size:.76rem;font-weight:750;background:var(--surface-soft);color:var(--muted);padding:7px 11px;border-radius:999px;border:1px solid var(--border);cursor:pointer;transition:.18s;user-select:none}
+        .options-group label:hover{border-color:var(--primary);color:var(--primary-dark)}
+        .options-group input[type=radio]{display:none}
+        .options-group input[type=radio]:checked+label{color:#fff;border-color:transparent;box-shadow:0 4px 10px rgba(5,113,238,.16)}
+        .options-group input[value="Tem"]:checked+label{background:linear-gradient(135deg,#22a45b,#168a49)}
+        .options-group input[value="Não tem"]:checked+label{background:linear-gradient(135deg,#ef4444,#dc2626)}
+        .options-group input[value="Vencido"]:checked+label{background:linear-gradient(135deg,#b91c1c,#7f1d1d)}
+        .options-group input[type=radio]:checked:not([value="Tem"]):not([value="Não tem"]):not([value="Vencido"])+label{background:linear-gradient(135deg,#f6b800,#d98b00)}
+
+        .btn-add-quote{background:#eef7ff;color:#0565c9;border:1px solid #b9d9f8;padding:7px 11px;border-radius:999px;font-size:.75rem;font-weight:800;cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:4px}
+        .btn-add-quote:hover{background:#0571ee;color:#fff;border-color:#0571ee}
+
+        .date-input{width:112px;min-width:112px;padding:7px 8px;border:1px solid var(--border);border-radius:8px;outline:none;font-family:inherit;font-size:.8rem;color:var(--text);background:#fff}
+        .date-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(5,113,238,.10)}
+        
+        .protocolo-container{background:#f8fbff;border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:20px;display:flex;flex-direction:column;gap:10px}
+        .protocolo-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+        .protocolo-field{display:flex;flex-direction:column;gap:4px}
+        .protocolo-field label{font-size:0.75rem;font-weight:800;color:#075da9}
+        .protocolo-input{width:140px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:0.9rem;outline:none;background:#fff;color:var(--text)}
+        .protocolo-input:focus,.secretaria-select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(5,113,238,.10)}
+        .secretaria-select{width:165px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:0.88rem;font-weight:700;outline:none;background:#fff;color:var(--text);cursor:pointer}
+        
+        .observation-toggle{padding:7px 10px;border:1px solid #b9d9f8;border-radius:8px;background:#eef7ff;color:#0565c9;font-size:.74rem;font-weight:800;white-space:nowrap;cursor:pointer;transition:.18s}
+        .observation-toggle:hover{background:#e1f1ff}
+        .observation-toggle.active{background:#0571ee;color:#fff;border-color:#0571ee}
+        .protocolo-row .observation-toggle,.protocolo-row .observation-wrapper{align-self:flex-end}
+        .observation-wrapper{display:flex;flex-direction:column;gap:5px;min-width:220px;flex:1 1 240px}
+        .observation-wrapper.hidden{display:none}
+        .observation-input{width:100%;min-height:48px;resize:vertical;padding:8px 10px;border:1px solid var(--border);border-radius:9px;outline:none;font-family:inherit;font-size:.84rem;color:var(--text);background:#fff}
+        .observation-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(5,113,238,.10)}
+        
+        .obs-aviso{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:12px 15px;border-radius:10px;font-size:0.84rem;font-weight:700;margin-top:24px;margin-bottom:8px}
+
+        .actions{margin-top:18px;display:flex;gap:9px;flex-wrap:wrap}
+        button{padding:11px 17px;border:none;border-radius:9px;font-weight:800;cursor:pointer;transition:.18s}
+        .btn-save{background:linear-gradient(135deg,#0571ee,#05abff);color:#fff}
+        .btn-save:hover{filter:brightness(1.05)}
+        .btn-new{background:#64748b;color:#fff}
+        .btn-new:hover{background:#475569}
+        
+        .history-list{list-style:none;padding:0;margin:14px 0 0;max-height:70vh;overflow-y:auto}
+        .history-item{padding:13px;border:1px solid var(--border);border-radius:11px;margin-bottom:9px;background:#fff}
+        .history-date{font-size:.76rem;color:var(--muted)}
+        .history-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+        .history-btn{padding:6px 8px;font-size:.72rem;border-radius:7px}
+        .btn-open{background:#e7f2ff;color:#0565c9}
+        .btn-delete{background:#feecec;color:#b91c1c}
+        .btn-pdf-small{background:#fff3d6;color:#9a6500}
+
+        .search-box{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:10px;font-size:0.85rem;outline:none;background:#fff;font-family:inherit}
+        .search-box:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(5,113,238,.10)}
+
+        .status-filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+        .filter-chip{padding:5px 9px;border-radius:999px;border:1px solid var(--border);background:var(--surface-soft);color:var(--muted);font-size:0.71rem;font-weight:750;cursor:pointer;transition:.15s}
+        .filter-chip:hover{border-color:var(--primary);color:var(--primary)}
+        .filter-chip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+        .sec-tag{display:inline-block;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;padding:2px 7px;border-radius:6px;font-size:0.69rem;font-weight:800;margin-right:4px}
+        .status-badge{display:inline-block;padding:3px 8px;border-radius:12px;font-size:0.7rem;font-weight:700;margin-top:5px}
+        .status-em-andamento{background:#e0f2fe;color:#0369a1}
+        .status-finalizada{background:#d1fae5;color:#047857}
+        .status-fracassada{background:#fee2e2;color:#b91c1c}
+        .status-suspensa{background:#fef3c7;color:#b45309}
+        .status-cancelada{background:#f1f5f9;color:#475569}
+        
+        .dropdown-container{position:relative;display:inline-block}
+        .dropdown-btn{background:#f1f5f9;border:1px solid var(--border);padding:4px 8px;border-radius:6px;cursor:pointer;font-weight:bold;font-size:0.85rem;color:var(--text)}
+        .dropdown-content{display:none;position:absolute;right:0;background:#fff;min-width:140px;box-shadow:0 8px 16px rgba(0,0,0,0.12);border:1px solid var(--border);border-radius:8px;z-index:20;padding:4px}
+        .dropdown-content.show{display:block}
+        .dropdown-content button{width:100%;text-align:left;padding:6px 8px;background:none;border:none;font-size:0.75rem;border-radius:4px;cursor:pointer;font-weight:600;color:var(--text)}
+        .dropdown-content button:hover{background:#f1f5f9;color:var(--primary)}
+
+        /* Modais de Cotações */
+        .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(15,23,42,0.55);z-index:1000;justify-content:center;align-items:center;padding:16px}
+        .modal-overlay.show{display:flex}
+        .modal-card{background:#fff;padding:24px;border-radius:16px;width:100%;max-width:480px;box-shadow:0 20px 45px rgba(0,0,0,0.22);max-height:90vh;overflow-y:auto}
+        .modal-card.wide{max-width:740px}
+        .modal-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:16px}
+        .modal-header h3{margin:0;font-size:1.08rem;color:#075da9}
+        .modal-close{background:#f1f5f9;color:#475569;border:none;width:30px;height:30px;border-radius:8px;font-weight:800;cursor:pointer;padding:0;display:grid;place-items:center}
+        .modal-field{margin-bottom:13px;display:flex;flex-direction:column;gap:5px}
+        .modal-field label{font-size:0.78rem;font-weight:800;color:var(--text)}
+        .modal-field input,.modal-field select{padding:9px 11px;border:1px solid var(--border);border-radius:8px;font-size:0.88rem;font-family:inherit;outline:none}
+        .modal-field input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(5,113,238,.10)}
+        .mode-switch{display:flex;gap:8px;background:var(--surface-soft);padding:5px;border-radius:10px;border:1px solid var(--border);margin-bottom:13px}
+        .mode-switch button{flex:1;padding:7px 10px;font-size:0.76rem;border-radius:7px;background:transparent;color:var(--muted);font-weight:750}
+        .mode-switch button.active{background:#fff;color:var(--primary);box-shadow:0 2px 6px rgba(0,0,0,0.08)}
+        .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;flex-wrap:wrap}
+
+        .quote-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+        .quote-stat-box{padding:11px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface-soft);text-align:center}
+        .quote-stat-box strong{display:block;font-size:1.25rem;margin-bottom:2px}
+        .quote-stat-box span{font-size:0.73rem;font-weight:700;color:var(--muted)}
+        .stat-valid strong{color:#168a49}
+        .stat-warn strong{color:#d97706}
+        .stat-expired strong{color:#dc2626}
+
+        .quote-list{display:flex;flex-direction:column;gap:10px}
+        .quote-card{border:1px solid var(--border);border-radius:11px;padding:12px 14px;background:#fff;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+        .quote-card.expired{border-left:4px solid #dc2626;background:#fffafa}
+        .quote-card.warning{border-left:4px solid #f59e0b;background:#fffdf5}
+        .quote-card.valid{border-left:4px solid #16a34a;background:#f8fffb}
+        .quote-badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:0.72rem;font-weight:800;margin-bottom:5px}
+        .qbadge-valid{background:#dcfce7;color:#15803d}
+        .qbadge-warn{background:#fef3c7;color:#b45309}
+        .qbadge-expired{background:#fee2e2;color:#b91c1c}
+        .quote-meta{font-size:0.8rem;color:var(--text);line-height:1.45}
+        .quote-warning-msg{margin-top:5px;font-size:0.76rem;font-weight:800;color:#b45309;background:#fef3c7;padding:4px 8px;border-radius:6px;display:inline-block}
+
+        @media(max-width:960px){
+            body{padding:12px}
+            .brand-content{align-items:flex-start;flex-direction:column}
+            .semagi{border-left:0;border-top:1px solid #dce5ee;padding:12px 0 0;text-align:left;width:100%}
+            .layout{flex-direction:column}
+            .app-container,.history-container{width:100%;padding:18px}
+            .history-container{position:static}
+            .item-row{align-items:stretch;flex-direction:column}
+            .options-group{justify-content:flex-start}
+            .observation-wrapper{min-width:0;width:100%}
+            .quote-summary-grid{grid-template-columns:1fr}
+        }
+    </style>
+</head>
+<body>
+    <header class="institutional-header">
+        <div class="brand-stripe"></div>
+        <div class="brand-content">
+            <div class="brand-left">
+                <div class="brand-mark">R</div>
+                <div><div class="brand-city">PREFEITURA DE RONDONÓPOLIS</div><div class="brand-sub">Compromisso com a mudança</div></div>
+            </div>
+            <div class="semagi"><strong>SEMAGI</strong><span>Secretaria Municipal de Administração, Gestão de Pessoas e Inovação</span></div>
+        </div>
+    </header>
+
+    <div class="modalidade-selector">
+        <div class="selector-title">📌 Selecione a Modalidade / Check-list do Processo:</div>
+        <div class="selector-buttons">
+            <button class="sel-btn active" id="btn-inex_pj" onclick="switchChecklist('inex_pj')">Inexigibilidade (Pessoa Jurídica)</button>
+            <button class="sel-btn" id="btn-inex_pf" onclick="switchChecklist('inex_pf')">Inexigibilidade (Pessoa Física)</button>
+            <button class="sel-btn" id="btn-inex_loc_pj" onclick="switchChecklist('inex_loc_pj')">Inexigibilidade - Locação Imóvel (PJ)</button>
+            <button class="sel-btn" id="btn-inex_loc_pf" onclick="switchChecklist('inex_loc_pf')">Inexigibilidade - Locação Imóvel (PF)</button>
+            <button class="sel-btn" id="btn-adesao" onclick="switchChecklist('adesao')">Adesão à Ata de Registro de Preços (ARP)</button>
+        </div>
+    </div>
+
+    <div class="layout">
+        <div class="app-container">
+            <input type="text" id="doc-title" class="title-input" value="Check List - Inexigibilidade de Licitação (Pessoa Jurídica)">
+            
+            <div class="protocolo-container">
+                <div class="protocolo-row">
+                    <div class="protocolo-field">
+                        <label for="doc-protocolo">📋 Nº de Protocolo</label>
+                        <input type="text" id="doc-protocolo" class="protocolo-input" placeholder="00000/0000" maxlength="10">
+                    </div>
+                    <div class="protocolo-field">
+                        <label for="doc-secretaria">🏛️ Secretaria Demandante</label>
+                        <select id="doc-secretaria" class="secretaria-select">
+                            <option value="">Selecione...</option>
+                            <option value="SEGOV">SEGOV</option>
+                            <option value="SEMAGI">SEMAGI</option>
+                            <option value="PGM/PROCON">PGM/PROCON</option>
+                            <option value="SMDE">SMDE</option>
+                            <option value="SEMECEL">SEMECEL</option>
+                            <option value="SEMFAZ">SEMFAZ</option>
+                            <option value="SINFRA">SINFRA</option>
+                            <option value="SEMMAAP">SEMMAAP</option>
+                            <option value="SEMOB">SEMOB</option>
+                            <option value="SEPPUR">SEPPUR</option>
+                            <option value="SEMPRAS">SEMPRAS</option>
+                            <option value="SMS">SMS</option>
+                            <option value="SETRACI">SETRACI</option>
+                        </select>
+                    </div>
+                    <button type="button" class="observation-toggle" id="proto-obs-btn" onclick="toggleProtocoloObs()">📝 Observação</button>
+                    <div class="observation-wrapper hidden" id="proto-obs-wrapper">
+                        <textarea id="doc-protocolo-obs" class="observation-input" placeholder="Digite uma observação para o protocolo..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div id="form-content"></div>
+
+            <div class="obs-aviso" id="obs-aviso-text">
+                Obs: Autenticar todas as vias (nome completo e matrícula ou assinatura e carimbo de identificação).
+            </div>
+            
+            <div class="actions">
+                <button class="btn-save" onclick="saveData()">Salvar Registro</button>
+                <button class="btn-new" onclick="clearForm()">Novo Formulário</button>
+            </div>
+        </div>
+
+        <div class="history-container">
+            <h2>Processos Salvos</h2>
+            <input type="text" id="history-search" class="search-box" placeholder="🔍 Pesquisar protocolo, secretaria ou título..." oninput="renderHistory()">
+            <div class="status-filters" id="status-filters">
+                <button type="button" class="filter-chip active" data-filter="Todos" onclick="setStatusFilter('Todos', this)">Todos</button>
+                <button type="button" class="filter-chip" data-filter="Em andamento" onclick="setStatusFilter('Em andamento', this)">Em andamento</button>
+                <button type="button" class="filter-chip" data-filter="Finalizada" onclick="setStatusFilter('Finalizada', this)">Finalizada</button>
+                <button type="button" class="filter-chip" data-filter="Fracassada" onclick="setStatusFilter('Fracassada', this)">Fracassada</button>
+                <button type="button" class="filter-chip" data-filter="Suspensa" onclick="setStatusFilter('Suspensa', this)">Suspensa</button>
+                <button type="button" class="filter-chip" data-filter="Cancelada" onclick="setStatusFilter('Cancelada', this)">Cancelada</button>
+            </div>
+            <ul class="history-list" id="history-list"></ul>
+        </div>
+    </div>
+
+    <!-- Modal: Adicionar Cotação -->
+    <div id="add-quote-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>➕ Adicionar Cotação</h3>
+                <button type="button" class="modal-close" onclick="closeAddQuoteModal()">✕</button>
+            </div>
+            <div class="modal-field">
+                <label for="quote-supplier">Fornecedor / Fonte (Opcional)</label>
+                <input type="text" id="quote-supplier" placeholder="Ex: Empresa ABC Ltda / Banco de Preços">
+            </div>
+            <div class="modal-field">
+                <label for="quote-start-date">Data Inicial da Cotação *</label>
+                <input type="text" id="quote-start-date" placeholder="dd/mm/aaaa" maxlength="10" onblur="completeDateYear(this)">
+            </div>
+            <div class="mode-switch">
+                <button type="button" id="qmode-days" class="active" onclick="setQuoteMode('days')">Informar Dias de Validade</button>
+                <button type="button" id="qmode-date" onclick="setQuoteMode('date')">Informar Data Final ("Até")</button>
+            </div>
+            <div class="modal-field" id="qfield-days">
+                <label for="quote-days">Dias de Validade *</label>
+                <input type="number" id="quote-days" min="1" placeholder="Ex: 60">
+            </div>
+            <div class="modal-field" id="qfield-end-date" style="display:none;">
+                <label for="quote-end-date">Válida Até *</label>
+                <input type="text" id="quote-end-date" placeholder="dd/mm/aaaa" maxlength="10" onblur="completeDateYear(this)">
+            </div>
+            <div class="modal-actions">
+                <button type="button" style="background:#e2e8f0;color:#334155;" onclick="closeAddQuoteModal()">Fechar</button>
+                <button type="button" style="background:#eef7ff;color:#0565c9;border:1px solid #b9d9f8;" onclick="addQuote(true)">Salvar e Adicionar Outra</button>
+                <button type="button" style="background:var(--primary);color:#fff;" onclick="addQuote(false)">Salvar Cotação</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Relatório de Cotações Adicionadas -->
+    <div id="report-quotes-modal" class="modal-overlay">
+        <div class="modal-card wide">
+            <div class="modal-header">
+                <h3>📊 Cotações Adicionadas — Relatório de Validade</h3>
+                <button type="button" class="modal-close" onclick="closeQuotesReportModal()">✕</button>
+            </div>
+            <div id="quotes-report-content"></div>
+            <div class="modal-actions">
+                <button type="button" style="background:#eef7ff;color:#0565c9;border:1px solid #b9d9f8;" onclick="closeQuotesReportModal(); openAddQuoteModal();">+ Nova Cotação</button>
+                <button type="button" style="background:#fff3d6;color:#9a6500;" onclick="printQuotesReportPDF()">🖨️ Imprimir / PDF</button>
+                <button type="button" style="background:#e2e8f0;color:#334155;" onclick="closeQuotesReportModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const checklistsConfig = {
+            inex_pj: {
+                title: "Check List - Inexigibilidade de Licitação (Pessoa Jurídica)",
+                sections: [
+                    {
+                        section: "Ofício e Planejamento",
+                        allowDate: false,
+                        items: [
+                            { text: "Ofício assinado pelo secretário;" },
+                            { text: "Estudo técnico preliminar – ETP;" },
+                            { text: "Comprovação de Inclusão no PCA (Publicação);" },
+                            { text: "Mapa de risco;" },
+                            { text: "Termo de referência;" },
+                            { text: "Classificação orçamentaria autorizado pela equipe econômica;" }
+                        ]
+                    },
+                    {
+                        section: "Justificativas",
+                        allowDate: false,
+                        items: [
+                            { text: "Justificativa da necessidade da aquisição/serviço;" },
+                            { text: "Justificativa da escolha do fornecedor;" },
+                            { text: "Justificativa do preço;" },
+                            { text: "Justificativa da vantajosidade;" },
+                            { text: "Declaração de que não possui ata/contrato ou processos em andamento;" },
+                            { text: "Declaração de sanções administrativas;" },
+                            { text: "Relatório de “Sanções a Fornecedor” do sistema AgiliBlue;" }
+                        ]
+                    },
+                    {
+                        section: "Orçamentos",
+                        isBudgetSection: true,
+                        allowDate: false,
+                        items: [
+                            { text: "Orçamento válido (contendo todos itens solicitados);", hasQuoteAction: true },
+                            { text: "Comprovação de solicitação de orçamento via e-mail ou ofício;" }
+                        ]
+                    },
+                    {
+                        section: "Documentações para Pessoa Jurídica",
+                        allowDate: true,
+                        items: [
+                            { text: "Cópia do contrato social e a última alteração (se houver);", noDate: true },
+                            { text: "Cópia dos documentos pessoais dos sócios (rg e cpf);", noDate: true },
+                            { text: "Alvará em vigência;" },
+                            { text: "Certidão conjunta negativa de débitos federais (receita federal);" },
+                            { text: "Certidão negativa de débitos estaduais (local da empresa);" },
+                            { text: "Certidão negativa de débitos municipais (local da empresa);" },
+                            { text: "Certidão negativa de débitos fgts;" },
+                            { text: "Certidão negativa de débitos trabalhistas;" },
+                            { text: "Declaração de que não possui fatos impeditivos à licitação;", noDate: true },
+                            { text: "Cartão cnpj;", noDate: true },
+                            { text: "Declaração de que não emprega menor;", noDate: true },
+                            { text: "Declaração de exclusividade (atestada por órgão ou empresa diferente da contratada);", noDate: true },
+                            { text: "Atestado de Capacidade Técnica;", noDate: true },
+                            { text: "Notória especialização;", noDate: true },
+                            { text: "Nota de empenho/nota fiscal (justificativa de valores);", noDate: true },
+                            { text: "Certidão negativa do ceis;" },
+                            { text: "Certidão negativa do tce (local da empresa);" },
+                            { text: "Certidão negativa do tcu (licitantes inidôneos);" }
+                        ]
+                    },
+                    {
+                        section: "Anexos e Fluxo",
+                        allowDate: false,
+                        items: [
+                            { text: "Minuta do contrato;" },
+                            { text: "Fluxo da modalidade (verificar se o item tem cadastro, fazer a lista no sistema informando seus itens e quantidades, informar a dotação e realizar o banco de preço - balizar pelo menor valor)." }
+                        ]
+                    }
+                ]
+            },
+            inex_pf: {
+                title: "Check List - Inexigibilidade de Licitação (Pessoa Física)",
+                sections: [
+                    {
+                        section: "Ofício e Planejamento",
+                        allowDate: false,
+                        items: [
+                            { text: "Ofício assinado pelo secretário;" },
+                            { text: "Estudo técnico preliminar – ETP;" },
+                            { text: "Comprovação de Inclusão no PCA;" },
+                            { text: "Mapa de risco;" },
+                            { text: "Termo de referência;" },
+                            { text: "Classificação orçamentaria autorizado pela equipe econômica;" }
+                        ]
+                    },
+                    {
+                        section: "Justificativas",
+                        allowDate: false,
+                        items: [
+                            { text: "Justificativa da necessidade da aquisição/serviço;" },
+                            { text: "Justificativa da escolha do fornecedor;" },
+                            { text: "Justificativa do preço;" },
+                            { text: "Justificativa da vantajosidade;" },
+                            { text: "Declaração de que não possui ata/contrato ou processos em andamento;" },
+                            { text: "Declaração de sanções administrativas;" },
+                            { text: "Relatório de “Sanções a Fornecedor” do sistema AgiliBlue;" }
+                        ]
+                    },
+                    {
+                        section: "Orçamentos",
+                        isBudgetSection: true,
+                        allowDate: false,
+                        items: [
+                            { text: "Orçamento válido (contendo todos itens solicitados);", hasQuoteAction: true },
+                            { text: "Comprovação de solicitação de orçamento via e-mail ou ofício;" }
+                        ]
+                    },
+                    {
+                        section: "Documentações para Pessoa Física",
+                        allowDate: true,
+                        items: [
+                            { text: "Certidão conjunta negativa de débitos federais (receita federal);" },
+                            { text: "Certidão negativa de débitos estaduais (local da residência da pessoa);" },
+                            { text: "Certidão negativa de débitos municipais (local da residência da pessoa);" },
+                            { text: "Certidão negativa de débitos trabalhistas;" },
+                            { text: "Declaração de que não possui fatos impeditivos à licitação;", noDate: true },
+                            { text: "Declaração de que não emprega menor;", noDate: true },
+                            { text: "Cópia dos documentos pessoais (rg e cpf);", noDate: true },
+                            { text: "Cópia de comprovante de endereço;", noDate: true },
+                            { text: "Comprovação de notória especialização;", noDate: true },
+                            { text: "Nota de empenho/nota fiscal (justificativa de valores);", noDate: true },
+                            { text: "Certidão negativa do ceis;" },
+                            { text: "Certidão negativa do tce (local da residência da pessoa);" },
+                            { text: "Certidão negativa do tcu (licitantes inidôneos);" }
+                        ]
+                    },
+                    {
+                        section: "Anexos e Fluxo",
+                        allowDate: false,
+                        items: [
+                            { text: "Minuta do contrato;" },
+                            { text: "Fluxo da modalidade (verificar se o item tem cadastro, fazer a lista no sistema informando seus itens e quantidades, informar a dotação e realizar o banco de preço - balizar pelo menor valor)." }
+                        ]
+                    }
+                ]
+            },
+            inex_loc_pj: {
+                title: "Check List - Inexigibilidade Locação de Imóvel (Pessoa Jurídica)",
+                sections: [
+                    {
+                        section: "Ofício e Planejamento",
+                        allowDate: false,
+                        items: [
+                            { text: "Ofício assinado pelo secretário;" },
+                            { text: "Estudo técnico preliminar – ETP;" },
+                            { text: "Comprovação de Inclusão no PCA (Publicação);" },
+                            { text: "Mapa de risco;" },
+                            { text: "Termo de referência;" },
+                            { text: "Classificação orçamentaria autorizado pela equipe econômica;" },
+                            { text: "Matricula do imóvel;" },
+                            { text: "BCI;" },
+                            { text: "Laudo de avaliação do imóvel;" }
+                        ]
+                    },
+                    {
+                        section: "Justificativas",
+                        allowDate: false,
+                        items: [
+                            { text: "Justificativa da necessidade da aquisição/serviço;" },
+                            { text: "Justificativa da escolha do fornecedor;" },
+                            { text: "Justificativa do preço;" },
+                            { text: "Justificativa da vantajosidade;" },
+                            { text: "Certificação da inexistência de imóveis públicos vagos e disponíveis que atendam ao objeto;" },
+                            { text: "Justificativa que demonstrem a singularidade do imóvel a ser comprado ou locado e que evidenciem vantagem;" },
+                            { text: "Avaliação prévia do bem, do seu estado de conservação;" },
+                            { text: "Declaração de sanções administrativas;" },
+                            { text: "Relatório de “Sanções a Fornecedor” do sistema AgiliBlue;" }
+                        ]
+                    },
+                    {
+                        section: "Orçamentos",
+                        isBudgetSection: true,
+                        allowDate: false,
+                        items: [
+                            { text: "Orçamento válido (contendo todos itens solicitados);", hasQuoteAction: true },
+                            { text: "Comprovação de solicitação de orçamento via e-mail ou oficio;" }
+                        ]
+                    },
+                    {
+                        section: "Documentações para Pessoa Jurídica",
+                        allowDate: true,
+                        items: [
+                            { text: "Cópia do contrato social e a última alteração (se houver);", noDate: true },
+                            { text: "Cópia dos documentos pessoais dos sócios (rg e cpf);", noDate: true },
+                            { text: "Alvará em vigência;" },
+                            { text: "Certidão conjunta negativa de débitos federais (receita federal);" },
+                            { text: "Certidão negativa de débitos estaduais (local da empresa);" },
+                            { text: "Certidão negativa de débitos municipais (local da empresa);" },
+                            { text: "Certidão negativa de débitos fgts;" },
+                            { text: "Certidão negativa de débitos trabalhistas;" },
+                            { text: "Declaração de que não possui fatos impeditivos à licitação;", noDate: true },
+                            { text: "Cartão cnpj;", noDate: true },
+                            { text: "Declaração de que não emprega menor;", noDate: true },
+                            { text: "Certidão negativa do ceis;" },
+                            { text: "Certidão negativa do tce (local da empresa);" },
+                            { text: "Certidão negativa do tcu (licitantes inidôneos);" }
+                        ]
+                    },
+                    {
+                        section: "Anexos e Fluxo",
+                        allowDate: false,
+                        items: [
+                            { text: "Minuta do contrato;" },
+                            { text: "Fluxo da modalidade (verificar se o item tem cadastro, fazer a lista no sistema informando seus itens e quantidades, informar a dotação e realizar o banco de preço - balizar pelo menor valor)." }
+                        ]
+                    }
+                ]
+            },
+            inex_loc_pf: {
+                title: "Check List - Inexigibilidade Locação de Imóvel (Pessoa Física)",
+                sections: [
+                    {
+                        section: "Ofício e Planejamento",
+                        allowDate: false,
+                        items: [
+                            { text: "Ofício assinado pelo secretário;" },
+                            { text: "Estudo técnico preliminar – ETP;" },
+                            { text: "Comprovação de Inclusão no PCA (Publicação);" },
+                            { text: "Mapa de risco;" },
+                            { text: "Termo de referência;" },
+                            { text: "Classificação orçamentaria autorizado pela equipe econômica;" },
+                            { text: "Matricula do imóvel;" },
+                            { text: "BCI;" },
+                            { text: "Laudo de avaliação do imóvel;" }
+                        ]
+                    },
+                    {
+                        section: "Justificativas",
+                        allowDate: false,
+                        items: [
+                            { text: "Justificativa da necessidade da aquisição/serviço;" },
+                            { text: "Justificativa da escolha do fornecedor;" },
+                            { text: "Justificativa do preço;" },
+                            { text: "Justificativa da vantajosidade;" },
+                            { text: "Certificação da inexistência de imóveis públicos vagos e disponíveis que atendam ao objeto;" },
+                            { text: "Justificativa que demonstrem a singularidade do imóvel e que evidenciem vantagem;" },
+                            { text: "Avaliação prévia do bem, do seu estado de conservação;" },
+                            { text: "Declaração de sanções administrativas;" },
+                            { text: "Relatório de “Sanções a Fornecedor” do sistema AgiliBlue;" }
+                        ]
+                    },
+                    {
+                        section: "Orçamentos",
+                        isBudgetSection: true,
+                        allowDate: false,
+                        items: [
+                            { text: "Orçamento válido (contendo todos itens solicitados);", hasQuoteAction: true },
+                            { text: "Comprovação de solicitação de orçamento via e-mail ou ofício;" }
+                        ]
+                    },
+                    {
+                        section: "Documentações para Pessoa Física",
+                        allowDate: true,
+                        items: [
+                            { text: "Cópia dos documentos pessoais (rg e cpf);", noDate: true },
+                            { text: "Cópia de comprovante de endereço;", noDate: true },
+                            { text: "Certidão conjunta negativa de débitos federais (receita federal);" },
+                            { text: "Certidão negativa de débitos estaduais (local da residência da pessoa);" },
+                            { text: "Certidão negativa de débitos municipais (local da residência da pessoa);" },
+                            { text: "Certidão negativa de débitos trabalhistas;" },
+                            { text: "Declaração de que não possui fatos impeditivos à licitação;", noDate: true },
+                            { text: "Declaração de que não emprega menor;", noDate: true },
+                            { text: "Certidão negativa do ceis;" },
+                            { text: "Certidão negativa do tce (local da residência da pessoa);" },
+                            { text: "Certidão negativa do tcu (licitantes inidôneos);" }
+                        ]
+                    },
+                    {
+                        section: "Anexos e Fluxo",
+                        allowDate: false,
+                        items: [
+                            { text: "Minuta do contrato;" },
+                            { text: "Fluxo da modalidade (verificar se o item tem cadastro, fazer a lista no sistema informando seus itens e quantidades, informar a dotação e realizar o banco de preço - balizar pelo menor valor)." }
+                        ]
+                    }
+                ]
+            },
+            adesao: {
+                title: "Check List - Adesão a Ata de Registro de Preços (ARP)",
+                sections: [
+                    {
+                        section: "Ofício e Planejamento",
+                        allowDate: false,
+                        items: [
+                            { text: "Oficio da secretaria demandante;" },
+                            { text: "Estudo técnico preliminar – ETP;" },
+                            { text: "Comprovação de Inclusão no PCA;" },
+                            { text: "Mapa de risco;" },
+                            { text: "Termo de referência;" },
+                            { text: "Classificação orçamentaria autorizado pela equipe econômica;" },
+                            { text: "Declaração de que não possui ata/contrato ou processos em andamento;" }
+                        ]
+                    },
+                    {
+                        section: "Justificativas",
+                        allowDate: false,
+                        items: [
+                            { text: "Justificativa da necessidade da aquisição/serviço;" },
+                            { text: "Justificativa da escolha do fornecedor;" },
+                            { text: "Justificativa do preço;" },
+                            { text: "Justificativa da vantajosidade;" }
+                        ]
+                    },
+                    {
+                        section: "Orçamentos e Anexos da Adesão",
+                        isBudgetSection: true,
+                        allowDate: false,
+                        items: [
+                            { text: "Ata de registro de preços objeto da adesão (cópia da original assinada);" },
+                            { text: "Manifestação/anuência do órgão gerenciador da ata;" },
+                            { text: "Ofício do órgão ou secretaria interessada para o órgão gerenciador da ata;" },
+                            { text: "Orçamento válido (contendo todos itens solicitados) / Pesquisa de mercado;", hasQuoteAction: true },
+                            { text: "Formação do preço estimado (método, fontes, responsável, balizamento, orçamentos);" },
+                            { text: "Verificar se tem preço público, caso não tiver anexar justificativa da ausência;" },
+                            { text: "Verificar se tem preço local, caso não tiver anexar justificativa da ausência;" },
+                            { text: "Comprovação de solicitação de orçamento via e-mail ou oficio;" },
+                            { text: "Comprovante de comunicação ao tce-mt (autorização para adesão a arp – aplic – emitido pelo órgão gerenciador);" },
+                            { text: "Proposta da empresa fornecedora (endereçada ao Município);" },
+                            { text: "Aceite da empresa fornecedora;" },
+                            { text: "Ofício do órgão ou secretaria interessada para a empresa fornecedora;" }
+                        ]
+                    },
+                    {
+                        section: "Documentação Jurídico Fiscal",
+                        allowDate: true,
+                        items: [
+                            { text: "Cópia do contrato social ou estatuto e a última alteração (se houver);", noDate: true },
+                            { text: "Cópia dos documentos pessoais dos sócios (rg e cpf);", noDate: true },
+                            { text: "Alvará em vigência;" },
+                            { text: "Certidão conjunta negativa de débitos federais (receita federal);" },
+                            { text: "Certidão negativa de débitos estaduais (local da empresa);" },
+                            { text: "Certidão negativa de débitos municipais (local da empresa);" },
+                            { text: "Certidão negativa de débitos fgts;" },
+                            { text: "Certidão negativa de débitos trabalhistas;" },
+                            { text: "Declaração de que não possui fatos impeditivos à licitação;", noDate: true },
+                            { text: "Cartão cnpj;", noDate: true },
+                            { text: "Declaração de que não emprega menor;", noDate: true },
+                            { text: "Certidão negativa do ceis;" },
+                            { text: "Certidão negativa do tce (local da empresa);" },
+                            { text: "Certidão negativa do tcu (licitantes inidôneos);" }
+                        ]
+                    },
+                    {
+                        section: "Anexos e Fluxo",
+                        allowDate: false,
+                        items: [
+                            { text: "Cópia do edital e anexos, TR, aviso, ata de sessão, resultado, adjudicação e homologação;" },
+                            { text: "Cópia das publicações da ARP no PNCP;" },
+                            { text: "Minuta do contrato a ser assinado com a empresa fornecedora;" },
+                            { text: "Fluxo da modalidade (verificar item no sistema, listar itens/quantidades, dotação e banco de preço)." }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        let currentChecklistKey = 'inex_pj';
+        let currentEditingId = null;
+        let currentStatusFilter = 'Todos';
+        let currentQuotes = [];
+        let quoteInputMode = 'days';
+
+        function switchChecklist(key) {
+            currentChecklistKey = key;
+            document.querySelectorAll('.sel-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(`btn-${key}`).classList.add('active');
+            
+            const cfg = checklistsConfig[key];
+            if (!currentEditingId) {
+                document.getElementById('doc-title').value = cfg.title;
+            }
+            renderForm();
+        }
+
+        function setStatusFilter(status, btnEl) {
+            currentStatusFilter = status;
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            if (btnEl) btnEl.classList.add('active');
+            renderHistory();
+        }
+
+        function toggleProtocoloObs() {
+            const wrapper = document.getElementById('proto-obs-wrapper');
+            const btn = document.getElementById('proto-obs-btn');
+            const isHidden = wrapper.classList.toggle('hidden');
+            btn.classList.toggle('active', !isHidden);
+            btn.textContent = isHidden ? '📝 Observação' : '✕ Ocultar';
+            if (!isHidden) document.getElementById('doc-protocolo-obs').focus();
+        }
+
+        function completeDateYear(input) {
+            const value = (input.value || '').trim();
+            const match = value.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2}|\d{4}))?$/);
+            if (!match) return;
+            const day = String(match[1]).padStart(2, '0');
+            const month = String(match[2]).padStart(2, '0');
+            let year = match[3] || String(new Date().getFullYear());
+            if (year.length === 2) year = `20${year}`;
+            input.value = `${day}/${month}/${year}`;
+        }
+
+        function parseDateBR(value) {
+            if (!value) return null;
+            let match = String(value).trim().match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+            if (!match) return null;
+            const day = Number(match[1]), month = Number(match[2]), year = Number(match[3]);
+            const date = new Date(year, month - 1, day);
+            if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) return null;
+            date.setHours(0,0,0,0);
+            return date;
+        }
+
+        function formatDateBR(dateObj) {
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const y = dateObj.getFullYear();
+            return `${d}/${m}/${y}`;
+        }
+
+        function countBusinessDays(startDate, endDate) {
+            if (endDate < startDate) return -1;
+            let count = 0;
+            const cur = new Date(startDate);
+            cur.setDate(cur.getDate() + 1);
+            while (cur <= endDate) {
+                const day = cur.getDay();
+                if (day !== 0 && day !== 6) count++;
+                cur.setDate(cur.getDate() + 1);
+            }
+            return count;
+        }
+
+        function evaluateQuoteStatus(quote) {
+            const start = parseDateBR(quote.startDate);
+            const end = parseDateBR(quote.endDate);
+            if (!start || !end) {
+                return { status: 'invalid', label: 'Data inválida', detail: 'Verifique as datas', businessDaysLeft: 0, calendarDaysLeft: 0 };
+            }
+
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            const msPerDay = 1000 * 60 * 60 * 24;
+            const totalDays = Math.round((end - start) / msPerDay);
+            const calendarDaysLeft = Math.round((end - today) / msPerDay);
+            const businessDaysLeft = countBusinessDays(today, end);
+
+            if (end < today) {
+                const expiredAgo = Math.abs(calendarDaysLeft);
+                return {
+                    status: 'expired',
+                    label: 'Vencida',
+                    detail: `Vencida há ${expiredAgo} dia(s) corrido(s)`,
+                    totalDays,
+                    calendarDaysLeft,
+                    businessDaysLeft
+                };
+            }
+
+            if (businessDaysLeft <= 3) {
+                const dayText = businessDaysLeft === 0 ? 'Vence hoje!' : `Restam ${businessDaysLeft} dia(s) útil(eis) (${calendarDaysLeft} corrido(s))`;
+                return {
+                    status: 'warning',
+                    label: 'Atenção — Próxima do Vencimento',
+                    detail: dayText,
+                    warningNote: '⚠️ Cuidado: faltam 3 dias úteis ou menos para vencer!',
+                    totalDays,
+                    calendarDaysLeft,
+                    businessDaysLeft
+                };
+            }
+
+            return {
+                status: 'valid',
+                label: 'Válida',
+                detail: `Restam ${calendarDaysLeft} dia(s) corrido(s) (${businessDaysLeft} úteis)`,
+                totalDays,
+                calendarDaysLeft,
+                businessDaysLeft
+            };
+        }
+
+        function updateDateStatus(inputId) {
+            const dateInput = document.getElementById(`${inputId}_date`);
+            if (!dateInput) return;
+            completeDateYear(dateInput);
+            const date = parseDateBR(dateInput.value);
+            if (!date) return;
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const desired = date < today ? 'Vencido' : 'Tem';
+            const radio = document.querySelector(`input[name="${inputId}"][value="${desired}"]`);
+            if (radio) {
+                radio.checked = true;
+                radio.dataset.wasChecked = "true";
+            }
+        }
+
+        function updateQuoteCountBadge() {
+            const badge = document.getElementById('quote-count-pill');
+            if (badge) {
+                badge.textContent = currentQuotes.length;
+            }
+        }
+
+        function renderForm(savedRecord = null) {
+            const container = document.getElementById('form-content');
+            container.innerHTML = '';
+
+            const formData = savedRecord ? (savedRecord.data || savedRecord) : {};
+            if (savedRecord) {
+                currentQuotes = Array.isArray(savedRecord.quotes) ? JSON.parse(JSON.stringify(savedRecord.quotes)) : [];
+                if (savedRecord.checklistKey) {
+                    currentChecklistKey = savedRecord.checklistKey;
+                    document.querySelectorAll('.sel-btn').forEach(b => b.classList.remove('active'));
+                    const btn = document.getElementById(`btn-${currentChecklistKey}`);
+                    if (btn) btn.classList.add('active');
+                }
+            }
+
+            document.getElementById('doc-protocolo').value = formData['protocolo_numero'] || '';
+            document.getElementById('doc-secretaria').value = formData['secretaria'] || '';
+            const protoObs = formData['protocolo_obs'] || '';
+            document.getElementById('doc-protocolo-obs').value = protoObs;
+            
+            const protoObsWrapper = document.getElementById('proto-obs-wrapper');
+            const protoObsBtn = document.getElementById('proto-obs-btn');
+            if (protoObs.trim()) {
+                protoObsWrapper.classList.remove('hidden');
+                protoObsBtn.classList.add('active');
+                protoObsBtn.textContent = '✕ Ocultar';
+            } else {
+                protoObsWrapper.classList.add('hidden');
+                protoObsBtn.classList.remove('active');
+                protoObsBtn.textContent = '📝 Observação';
+            }
+
+            const cfg = checklistsConfig[currentChecklistKey];
+
+            cfg.sections.forEach((section, secIndex) => {
+                const sectionTitle = document.createElement('h3');
+                sectionTitle.className = 'section-header';
+
+                const titleSpan = document.createElement('span');
+                titleSpan.textContent = section.section;
+                sectionTitle.appendChild(titleSpan);
+
+                if (section.isBudgetSection) {
+                    const reportBtn = document.createElement('button');
+                    reportBtn.type = 'button';
+                    reportBtn.className = 'btn-header-report';
+                    reportBtn.innerHTML = `📊 Cotações Adicionadas <span class="quote-count-pill" id="quote-count-pill">${currentQuotes.length}</span>`;
+                    reportBtn.onclick = openQuotesReportModal;
+                    sectionTitle.appendChild(reportBtn);
+                }
+
+                container.appendChild(sectionTitle);
+
+                const sectionAllowsDate = section.allowDate !== false;
+
+                section.items.forEach((item, itemIndex) => {
+                    const inputId = `sec_${secIndex}_item_${itemIndex}`;
+                    renderItemRow(container, item, inputId, formData, sectionAllowsDate);
+                });
+            });
+        }
+
+        function renderItemRow(container, item, inputId, formData, sectionAllowsDate) {
+            const row = document.createElement('div');
+            row.className = 'item-row';
+
+            const label = document.createElement('div');
+            label.className = 'item-label';
+            label.textContent = item.text;
+            row.appendChild(label);
+
+            const savedValue = formData[inputId] || '';
+            const savedDate = formData[`${inputId}_date`] || '';
+            const savedObs = formData[`${inputId}_observation`] || '';
+
+            const optionsGroup = document.createElement('div');
+            optionsGroup.className = 'options-group';
+
+            if (item.hasQuoteAction) {
+                const addQuoteBtn = document.createElement('button');
+                addQuoteBtn.type = 'button';
+                addQuoteBtn.className = 'btn-add-quote';
+                addQuoteBtn.innerHTML = '➕ Adicionar cotações';
+                addQuoteBtn.onclick = openAddQuoteModal;
+                optionsGroup.appendChild(addQuoteBtn);
+            }
+
+            const showDateAndVencido = sectionAllowsDate && !item.noDate && !item.hasQuoteAction;
+
+            const options = showDateAndVencido
+                ? ['Tem', 'Não tem', 'Vencido']
+                : ['Tem', 'Não tem'];
+
+            options.forEach((opt, optIndex) => {
+                const wrapper = document.createElement('div');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = inputId;
+                radio.id = `${inputId}_opt${optIndex}`;
+                radio.value = opt;
+                if (savedValue === opt) {
+                    radio.checked = true;
+                    radio.dataset.wasChecked = "true";
+                }
+
+                radio.addEventListener('click', function() {
+                    if (this.dataset.wasChecked === "true") {
+                        this.checked = false;
+                        this.dataset.wasChecked = "false";
+                    } else {
+                        document.querySelectorAll(`input[name="${this.name}"]`).forEach(r => r.dataset.wasChecked = "false");
+                        this.dataset.wasChecked = "true";
+                    }
+                });
+
+                const radioLabel = document.createElement('label');
+                radioLabel.htmlFor = `${inputId}_opt${optIndex}`;
+                radioLabel.textContent = opt;
+
+                wrapper.appendChild(radio);
+                wrapper.appendChild(radioLabel);
+                optionsGroup.appendChild(wrapper);
+            });
+
+            row.appendChild(optionsGroup);
+
+            if (showDateAndVencido) {
+                const dateInput = document.createElement('input');
+                dateInput.type = 'text';
+                dateInput.name = `${inputId}_date`;
+                dateInput.id = `${inputId}_date`;
+                dateInput.className = 'date-input';
+                dateInput.placeholder = 'dd/mm/aaaa';
+                dateInput.inputMode = 'numeric';
+                dateInput.value = savedDate;
+                
+                dateInput.addEventListener('blur', () => updateDateStatus(inputId));
+                dateInput.addEventListener('change', () => updateDateStatus(inputId));
+                row.appendChild(dateInput);
+            }
+
+            // Botão e campo de Observação individual em cada item
+            const obsButton = document.createElement('button');
+            obsButton.type = 'button';
+            obsButton.className = 'observation-toggle';
+            obsButton.textContent = savedObs.trim() ? '✕ Ocultar' : '📝 Observação';
+            if (savedObs.trim()) obsButton.classList.add('active');
+
+            const obsWrapper = document.createElement('div');
+            obsWrapper.className = `observation-wrapper ${savedObs.trim() ? '' : 'hidden'}`;
+
+            const obsInput = document.createElement('textarea');
+            obsInput.id = `${inputId}_observation`;
+            obsInput.name = `${inputId}_observation`;
+            obsInput.className = 'observation-input';
+            obsInput.placeholder = 'Digite uma observação para este item, se necessário...';
+            obsInput.value = savedObs;
+
+            obsButton.addEventListener('click', () => {
+                const isHidden = obsWrapper.classList.toggle('hidden');
+                obsButton.classList.toggle('active', !isHidden);
+                obsButton.textContent = isHidden ? '📝 Observação' : '✕ Ocultar';
+                if (!isHidden) obsInput.focus();
+            });
+
+            obsWrapper.appendChild(obsInput);
+            row.appendChild(obsButton);
+            row.appendChild(obsWrapper);
+
+            container.appendChild(row);
+        }
+
+        // Funções do Modal de Adicionar Cotação
+        function openAddQuoteModal() {
+            document.getElementById('quote-supplier').value = '';
+            document.getElementById('quote-start-date').value = '';
+            document.getElementById('quote-days').value = '';
+            document.getElementById('quote-end-date').value = '';
+            setQuoteMode('days');
+            document.getElementById('add-quote-modal').classList.add('show');
+            document.getElementById('quote-supplier').focus();
+        }
+
+        function closeAddQuoteModal() {
+            document.getElementById('add-quote-modal').classList.remove('show');
+        }
+
+        function setQuoteMode(mode) {
+            quoteInputMode = mode;
+            document.getElementById('qmode-days').classList.toggle('active', mode === 'days');
+            document.getElementById('qmode-date').classList.toggle('active', mode === 'date');
+            document.getElementById('qfield-days').style.display = mode === 'days' ? 'flex' : 'none';
+            document.getElementById('qfield-end-date').style.display = mode === 'date' ? 'flex' : 'none';
+        }
+
+        function addQuote(keepOpen) {
+            const supplier = document.getElementById('quote-supplier').value.trim() || `Cotação #${currentQuotes.length + 1}`;
+            const startInput = document.getElementById('quote-start-date');
+            completeDateYear(startInput);
+            const startDateObj = parseDateBR(startInput.value);
+
+            if (!startDateObj) {
+                alert('Por favor, informe uma Data Inicial válida no formato dd/mm/aaaa.');
+                startInput.focus();
+                return;
+            }
+
+            let endDateObj = null;
+            let validityDays = 0;
+
+            if (quoteInputMode === 'days') {
+                const daysVal = parseInt(document.getElementById('quote-days').value, 10);
+                if (!daysVal || daysVal <= 0) {
+                    alert('Informe a quantidade de dias de validade (maior que zero).');
+                    document.getElementById('quote-days').focus();
+                    return;
+                }
+                validityDays = daysVal;
+                endDateObj = new Date(startDateObj);
+                endDateObj.setDate(endDateObj.getDate() + daysVal);
+            } else {
+                const endInput = document.getElementById('quote-end-date');
+                completeDateYear(endInput);
+                endDateObj = parseDateBR(endInput.value);
+                if (!endDateObj) {
+                    alert('Por favor, informe uma Data Final ("Até") válida no formato dd/mm/aaaa.');
+                    endInput.focus();
+                    return;
+                }
+                if (endDateObj < startDateObj) {
+                    alert('A data final não pode ser anterior à data inicial da cotação.');
+                    endInput.focus();
+                    return;
+                }
+                validityDays = Math.round((endDateObj - startDateObj) / (1000 * 60 * 60 * 24));
+            }
+
+            currentQuotes.push({
+                id: Date.now().toString() + Math.random().toString(36).slice(2, 6),
+                supplier,
+                startDate: formatDateBR(startDateObj),
+                endDate: formatDateBR(endDateObj),
+                validityDays
+            });
+
+            updateQuoteCountBadge();
+
+            if (keepOpen) {
+                document.getElementById('quote-supplier').value = '';
+                document.getElementById('quote-start-date').value = '';
+                document.getElementById('quote-days').value = '';
+                document.getElementById('quote-end-date').value = '';
+                document.getElementById('quote-supplier').focus();
+                alert(`Cotação adicionada! Total atual: ${currentQuotes.length} cotação(ões).`);
+            } else {
+                closeAddQuoteModal();
+                openQuotesReportModal();
+            }
+        }
+
+        function removeQuote(quoteId) {
+            currentQuotes = currentQuotes.filter(q => q.id !== quoteId);
+            updateQuoteCountBadge();
+            renderQuotesReport();
+        }
+
+        function openQuotesReportModal() {
+            renderQuotesReport();
+            document.getElementById('report-quotes-modal').classList.add('show');
+        }
+
+        function closeQuotesReportModal() {
+            document.getElementById('report-quotes-modal').classList.remove('show');
+        }
+
+        function renderQuotesReport() {
+            const container = document.getElementById('quotes-report-content');
+            if (!currentQuotes.length) {
+                container.innerHTML = `<div style="text-align:center;padding:24px;color:var(--muted);font-size:0.88rem;">
+                    Nenhuma cotação foi adicionada a este processo ainda.<br>Clique em <strong>"+ Nova Cotação"</strong> para cadastrar.
+                </div>`;
+                return;
+            }
+
+            let validCount = 0;
+            let warnCount = 0;
+            let expiredCount = 0;
+
+            const cardsHTML = currentQuotes.map((q, idx) => {
+                const evalRes = evaluateQuoteStatus(q);
+                if (evalRes.status === 'valid') validCount++;
+                else if (evalRes.status === 'warning') warnCount++;
+                else expiredCount++;
+
+                const badgeClass = evalRes.status === 'valid' ? 'qbadge-valid' : (evalRes.status === 'warning' ? 'qbadge-warn' : 'qbadge-expired');
+
+                return `
+                    <div class="quote-card ${evalRes.status}">
+                        <div>
+                            <span class="quote-badge ${badgeClass}">${evalRes.label}</span>
+                            <div style="font-weight:800;font-size:0.9rem;color:#19324a;margin-bottom:3px;">${idx + 1}. ${escapeHTML(q.supplier)}</div>
+                            <div class="quote-meta">
+                                <strong>Data Inicial:</strong> ${escapeHTML(q.startDate)} &nbsp;|&nbsp; 
+                                <strong>Válida Até:</strong> ${escapeHTML(q.endDate)} (${q.validityDays} dias)<br>
+                                <strong>Situação Atual:</strong> ${escapeHTML(evalRes.detail)}
+                            </div>
+                            ${evalRes.warningNote ? `<div class="quote-warning-msg">${evalRes.warningNote}</div>` : ''}
+                        </div>
+                        <button type="button" class="history-btn btn-delete" onclick="removeQuote('${q.id}')">Excluir</button>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="quote-summary-grid">
+                    <div class="quote-stat-box stat-valid"><strong>${validCount}</strong><span>Válidas (> 3 dias úteis)</span></div>
+                    <div class="quote-stat-box stat-warn"><strong>${warnCount}</strong><span>Atenção (≤ 3 dias úteis)</span></div>
+                    <div class="quote-stat-box stat-expired"><strong>${expiredCount}</strong><span>Vencidas</span></div>
+                </div>
+                <div class="quote-list">${cardsHTML}</div>
+            `;
+        }
+
+        function printQuotesReportPDF() {
+            if (!currentQuotes.length) {
+                alert('Adicione ao menos uma cotação antes de gerar o relatório.');
+                return;
+            }
+
+            const title = document.getElementById('doc-title').value || 'Relatório de Validade das Cotações';
+            const proto = document.getElementById('doc-protocolo').value || 'Não informado';
+            const sec = document.getElementById('doc-secretaria').value || 'Não informada';
+
+            let validCount = 0, warnCount = 0, expiredCount = 0;
+
+            const rowsHTML = currentQuotes.map((q, idx) => {
+                const evalRes = evaluateQuoteStatus(q);
+                if (evalRes.status === 'valid') validCount++;
+                else if (evalRes.status === 'warning') warnCount++;
+                else expiredCount++;
+
+                const statusColor = evalRes.status === 'valid' ? '#15803d' : (evalRes.status === 'warning' ? '#b45309' : '#b91c1c');
+                return `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td><strong>${escapeHTML(q.supplier)}</strong></td>
+                        <td>${escapeHTML(q.startDate)}</td>
+                        <td>${escapeHTML(q.endDate)} (${q.validityDays}d)</td>
+                        <td style="color:${statusColor};font-weight:bold;">${escapeHTML(evalRes.label)}</td>
+                        <td>${escapeHTML(evalRes.detail)}${evalRes.warningNote ? '<br><strong>' + escapeHTML(evalRes.warningNote) + '</strong>' : ''}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            const printWin = window.open('', '_blank');
+            if (!printWin) {
+                alert('O navegador bloqueou o pop-up de impressão.');
+                return;
+            }
+
+            printWin.document.write(`
+                <!DOCTYPE html>
+                <html lang="pt-BR">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Relatório de Cotações - ${escapeHTML(proto)}</title>
+                    <style>
+                        @page { size: A4; margin: 14mm; }
+                        body { font-family: Arial, sans-serif; color: #1e293b; font-size: 11px; margin: 0; }
+                        .header { border-bottom: 3px solid #0571ee; padding-bottom: 10px; margin-bottom: 16px; }
+                        h1 { margin: 0 0 4px; font-size: 17px; color: #075da9; }
+                        .meta { font-size: 10px; color: #475569; }
+                        .summary { display: flex; gap: 12px; margin-bottom: 16px; }
+                        .box { flex: 1; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; text-align: center; background: #f8fafc; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid #cbd5e1; padding: 7px 8px; text-align: left; vertical-align: middle; }
+                        th { background: #f1f5f9; font-weight: bold; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Prefeitura de Rondonópolis — SEMAGI</h1>
+                        <h1>Relatório de Validade das Cotações</h1>
+                        <div class="meta"><strong>Processo:</strong> ${escapeHTML(title)} | <strong>Protocolo:</strong> ${escapeHTML(proto)} | <strong>Secretaria:</strong> ${escapeHTML(sec)}</div>
+                        <div class="meta">Emitido em: ${new Date().toLocaleString('pt-BR')}</div>
+                    </div>
+                    <div class="summary">
+                        <div class="box"><strong>${validCount}</strong><br>Válidas</div>
+                        <div class="box"><strong>${warnCount}</strong><br>Atenção (≤ 3 dias úteis)</div>
+                        <div class="box"><strong>${expiredCount}</strong><br>Vencidas</div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th style="width:5%;">#</th>
+                                <th style="width:24%;">Fornecedor / Fonte</th>
+                                <th style="width:13%;">Data Inicial</th>
+                                <th style="width:16%;">Validade Até</th>
+                                <th style="width:16%;">Status</th>
+                                <th style="width:26%;">Período Restante / Observação</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHTML}</tbody>
+                    </table>
+                    <script>window.onload = function() { setTimeout(() => window.print(), 250); };<\/script>
+                </body>
+                </html>
+            `);
+            printWin.document.close();
+        }
+
+        function saveData() {
+            const title = document.getElementById('doc-title').value;
+            const formData = {};
+
+            formData['protocolo_numero'] = document.getElementById('doc-protocolo').value;
+            formData['secretaria'] = document.getElementById('doc-secretaria').value;
+            formData['protocolo_obs'] = document.getElementById('doc-protocolo-obs').value;
+
+            const cfg = checklistsConfig[currentChecklistKey];
+            cfg.sections.forEach((section, secIndex) => {
+                const sectionAllowsDate = section.allowDate !== false;
+                section.items.forEach((item, itemIndex) => {
+                    const inputId = `sec_${secIndex}_item_${itemIndex}`;
+                    const selected = document.querySelector(`input[name="${inputId}"]:checked`);
+                    formData[inputId] = selected ? selected.value : '';
+                    const showDate = sectionAllowsDate && !item.noDate && !item.hasQuoteAction;
+                    if (showDate && document.getElementById(`${inputId}_date`)) {
+                        formData[`${inputId}_date`] = document.getElementById(`${inputId}_date`).value || '';
+                    }
+                    const obsEl = document.getElementById(`${inputId}_observation`);
+                    if (obsEl) {
+                        formData[`${inputId}_observation`] = obsEl.value || '';
+                    }
+                });
+            });
+
+            let history = JSON.parse(localStorage.getItem('checklist_proc_history')) || [];
+            let existingStatus = 'Em andamento';
+
+            if (currentEditingId) {
+                const existingRecord = history.find(h => h.id === currentEditingId);
+                if (existingRecord && existingRecord.status) {
+                    existingStatus = existingRecord.status;
+                }
+            }
+
+            const record = {
+                id: currentEditingId || Date.now().toString(),
+                title: title,
+                checklistKey: currentChecklistKey,
+                date: new Date().toLocaleString('pt-BR'),
+                status: existingStatus,
+                data: formData,
+                quotes: JSON.parse(JSON.stringify(currentQuotes))
+            };
+
+            if (currentEditingId) {
+                const index = history.findIndex(h => h.id === currentEditingId);
+                if (index !== -1) history[index] = record;
+                else history.unshift(record);
+            } else {
+                history.unshift(record);
+                currentEditingId = record.id;
+            }
+
+            localStorage.setItem('checklist_proc_history', JSON.stringify(history));
+            alert('Questionário salvo com sucesso!');
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            list.innerHTML = '';
+            const history = JSON.parse(localStorage.getItem('checklist_proc_history')) || [];
+            const searchTerm = (document.getElementById('history-search')?.value || '').toLowerCase().trim();
+
+            const filteredHistory = history.filter(record => {
+                const recordStatus = record.status || 'Em andamento';
+                if (currentStatusFilter !== 'Todos' && recordStatus !== currentStatusFilter) {
+                    return false;
+                }
+
+                if (!searchTerm) return true;
+                const titleMatch = record.title.toLowerCase().includes(searchTerm);
+                const protoMatch = record.data && record.data['protocolo_numero'] && record.data['protocolo_numero'].toLowerCase().includes(searchTerm);
+                const secMatch = record.data && record.data['secretaria'] && record.data['secretaria'].toLowerCase().includes(searchTerm);
+                return titleMatch || protoMatch || secMatch;
+            });
+
+            if (!filteredHistory.length) {
+                list.innerHTML = '<li style="color:var(--muted);font-size:0.85rem;text-align:center;padding:16px">Nenhum processo encontrado para o filtro selecionado.</li>';
+                return;
+            }
+
+            filteredHistory.forEach(record => {
+                const li = document.createElement('li');
+                li.className = 'history-item';
+
+                const titleRow = document.createElement('div');
+                titleRow.style.display = 'flex';
+                titleRow.style.justifyContent = 'space-between';
+                titleRow.style.alignItems = 'flex-start';
+                titleRow.style.gap = '8px';
+
+                const title = document.createElement('strong');
+                const secSigla = record.data && record.data['secretaria'] ? `<span class="sec-tag">${escapeHTML(record.data['secretaria'])}</span>` : '';
+                const protoNum = record.data && record.data['protocolo_numero'] ? `[Prot: ${escapeHTML(record.data['protocolo_numero'])}] ` : '';
+                title.innerHTML = `${secSigla}${protoNum}${escapeHTML(record.title)}`;
+                title.style.flex = '1';
+                title.style.fontSize = '0.84rem';
+                title.style.lineHeight = '1.35';
+
+                const currentStatus = record.status || 'Em andamento';
+                const dropdownContainer = document.createElement('div');
+                dropdownContainer.className = 'dropdown-container';
+
+                const dotBtn = document.createElement('button');
+                dotBtn.className = 'dropdown-btn';
+                dotBtn.innerHTML = '⋮';
+                dotBtn.title = 'Alterar situação';
+                dotBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('.dropdown-content').forEach(d => { if (d !== dropdownContent) d.classList.remove('show'); });
+                    dropdownContent.classList.toggle('show');
+                };
+
+                const dropdownContent = document.createElement('div');
+                dropdownContent.className = 'dropdown-content';
+
+                ['Em andamento', 'Finalizada', 'Fracassada', 'Suspensa', 'Cancelada'].forEach(st => {
+                    const optBtn = document.createElement('button');
+                    optBtn.textContent = st;
+                    if (st === currentStatus) optBtn.style.fontWeight = '800';
+                    optBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        updateRecordStatus(record.id, st);
+                    };
+                    dropdownContent.appendChild(optBtn);
+                });
+
+                dropdownContainer.appendChild(dotBtn);
+                dropdownContainer.appendChild(dropdownContent);
+                titleRow.appendChild(title);
+                titleRow.appendChild(dropdownContainer);
+
+                const badge = document.createElement('span');
+                badge.className = `status-badge status-${slugify(currentStatus)}`;
+                badge.textContent = currentStatus;
+
+                const date = document.createElement('div');
+                date.className = 'history-date';
+                date.style.marginTop = '4px';
+                const quotesCount = Array.isArray(record.quotes) ? record.quotes.length : 0;
+                date.textContent = `Salvo em: ${record.date}${quotesCount ? ` • ${quotesCount} cotação(ões)` : ''}`;
+
+                const actions = document.createElement('div');
+                actions.className = 'history-actions';
+
+                const openBtn = document.createElement('button');
+                openBtn.className = 'history-btn btn-open';
+                openBtn.textContent = 'Abrir';
+                openBtn.onclick = () => openRecord(record);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'history-btn btn-delete';
+                deleteBtn.textContent = 'Excluir';
+                deleteBtn.onclick = () => deleteRecord(record.id);
+
+                const pdfBtn = document.createElement('button');
+                pdfBtn.className = 'history-btn btn-pdf-small';
+                pdfBtn.textContent = '📄 PDF';
+                pdfBtn.onclick = () => exportRecordPDF(record);
+
+                actions.appendChild(openBtn);
+                actions.appendChild(pdfBtn);
+                actions.appendChild(deleteBtn);
+
+                li.appendChild(titleRow);
+                li.appendChild(badge);
+                li.appendChild(date);
+                li.appendChild(actions);
+                list.appendChild(li);
+            });
+        }
+
+        function updateRecordStatus(id, newStatus) {
+            let history = JSON.parse(localStorage.getItem('checklist_proc_history')) || [];
+            const index = history.findIndex(h => h.id === id);
+            if (index !== -1) {
+                history[index].status = newStatus;
+                localStorage.setItem('checklist_proc_history', JSON.stringify(history));
+                renderHistory();
+            }
+        }
+
+        function openRecord(record) {
+            currentEditingId = record.id;
+            currentChecklistKey = record.checklistKey || 'inex_pj';
+            document.getElementById('doc-title').value = record.title;
+            renderForm(record);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function deleteRecord(id) {
+            if (!confirm('Deseja realmente excluir este registro?')) return;
+            let history = JSON.parse(localStorage.getItem('checklist_proc_history')) || [];
+            history = history.filter(item => item.id !== id);
+            localStorage.setItem('checklist_proc_history', JSON.stringify(history));
+            if (currentEditingId === id) clearForm();
+            renderHistory();
+        }
+
+        function clearForm() {
+            currentEditingId = null;
+            currentQuotes = [];
+            const cfg = checklistsConfig[currentChecklistKey];
+            document.getElementById('doc-title').value = cfg.title;
+            document.getElementById('doc-protocolo').value = '';
+            document.getElementById('doc-secretaria').value = '';
+            document.getElementById('doc-protocolo-obs').value = '';
+            document.getElementById('proto-obs-wrapper').classList.add('hidden');
+            document.getElementById('proto-obs-btn').classList.remove('active');
+            document.getElementById('proto-obs-btn').textContent = '📝 Observação';
+            renderForm();
+        }
+
+        function slugify(text) {
+            return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-');
+        }
+
+        function exportRecordPDF(record) {
+            const formData = record.data || record;
+            const cfg = checklistsConfig[record.checklistKey || 'inex_pj'];
+            const protocoloNum = formData['protocolo_numero'] ? `Nº de Protocolo: ${escapeHTML(formData['protocolo_numero'])}` : '';
+            const secretariaSigla = formData['secretaria'] ? `Secretaria Demandante: ${escapeHTML(formData['secretaria'])}` : '';
+            const metaDetails = [protocoloNum, secretariaSigla].filter(Boolean).join(' | ');
+            const protoObs = (formData['protocolo_obs'] || '').trim();
+
+            let sectionsHTML = '';
+            cfg.sections.forEach((section, secIndex) => {
+                let rows = '';
+                section.items.forEach((item, itemIndex) => {
+                    const inputId = `sec_${secIndex}_item_${itemIndex}`;
+                    const value = formData[inputId] || 'Não preenchido';
+                    const obs = (formData[`${inputId}_observation`] || '').trim();
+                    let details = `<strong>${escapeHTML(value)}</strong>`;
+                    if (formData[`${inputId}_date`]) {
+                        details += `<br><span style="font-size:9px;color:#475569;">Validade: ${escapeHTML(formData[`${inputId}_date`])}</span>`;
+                    }
+                    if (obs) {
+                        details += `<br><span style="font-size:9px;color:#0f172a;"><strong>Obs:</strong> ${escapeHTML(obs)}</span>`;
+                    }
+                    rows += `<tr><td class="col-doc">${escapeHTML(item.text)}</td><td class="col-sit">${details}</td></tr>`;
+                });
+
+                sectionsHTML += `
+                    <h2>${escapeHTML(section.section)}</h2>
+                    <table>
+                        <colgroup>
+                            <col style="width: 72%;">
+                            <col style="width: 28%;">
+                        </colgroup>
+                        <thead><tr><th class="col-doc">Documento / Item</th><th class="col-sit">Situação</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                `;
+            });
+
+            if (Array.isArray(record.quotes) && record.quotes.length > 0) {
+                const quoteRows = record.quotes.map((q, idx) => {
+                    const ev = evaluateQuoteStatus(q);
+                    return `<tr>
+                        <td class="col-doc">${idx + 1}. ${escapeHTML(q.supplier)} — Início: ${escapeHTML(q.startDate)} | Até: ${escapeHTML(q.endDate)} (${q.validityDays}d)</td>
+                        <td class="col-sit"><strong>${escapeHTML(ev.label)}</strong><br><span style="font-size:9px;">${escapeHTML(ev.detail)}</span></td>
+                    </tr>`;
+                }).join('');
+
+                sectionsHTML += `
+                    <h2>Relatório de Cotações Adicionadas</h2>
+                    <table>
+                        <colgroup>
+                            <col style="width: 72%;">
+                            <col style="width: 28%;">
+                        </colgroup>
+                        <thead><tr><th class="col-doc">Cotação / Período</th><th class="col-sit">Validade</th></tr></thead>
+                        <tbody>${quoteRows}</tbody>
+                    </table>
+                `;
+            }
+
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) {
+                alert('O navegador bloqueou a janela do PDF. Permita pop-ups para este site.');
+                return;
+            }
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html lang="pt-BR">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>${escapeHTML(record.title)}</title>
+                    <style>
+                        @page { size: A4; margin: 12mm; }
+                        * { box-sizing: border-box; }
+                        body { font-family: Arial, sans-serif; color: #1e293b; font-size: 11px; margin: 0; }
+                        .header { border-bottom: 3px solid #0571ee; padding-bottom: 10px; margin-bottom: 15px; }
+                        h1 { margin: 0 0 5px; font-size: 17px; color: #075da9; }
+                        .meta { color: #64748b; font-size: 10px; }
+                        h2 { font-size: 12px; color: white; background: #0571ee; padding: 6px 8px; border-radius: 4px; margin: 15px 0 6px; page-break-after: avoid; }
+                        table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-bottom: 10px; }
+                        th, td { border: 1px solid #cbd5e1; padding: 6px 8px; text-align: left; vertical-align: middle; word-wrap: break-word; overflow-wrap: break-word; }
+                        th { background: #f1f5f9; font-weight: bold; }
+                        tr { page-break-inside: avoid; }
+                        .col-doc { width: 72%; }
+                        .col-sit { width: 28%; }
+                        .footer { margin-top: 20px; font-size: 9px; color: #64748b; border-top: 1px solid #cbd5e1; padding-top: 6px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Prefeitura de Rondonópolis — SEMAGI</h1>
+                        <h1>${escapeHTML(record.title)}</h1>
+                        <div class="meta">Salvo em: ${escapeHTML(record.date)} | Situação: ${escapeHTML(record.status || 'Em andamento')}</div>
+                        ${metaDetails ? `<div class="meta" style="margin-top:4px;font-weight:bold;color:#075da9;">${metaDetails}</div>` : ''}
+                        ${protoObs ? `<div class="meta" style="margin-top:4px;color:#1e293b;"><strong>Observação do Protocolo:</strong> ${escapeHTML(protoObs)}</div>` : ''}
+                    </div>
+                    ${sectionsHTML}
+                    <div style="margin-top:15px;font-weight:bold;font-size:10px;">
+                        Obs: Autenticar todas as vias (nome completo e matrícula ou assinatura e carimbo de identificação).
+                    </div>
+                    <div class="footer">Gerenciado pelo Sistema de Controle de Licitações e Contratos.</div>
+                    <script>window.onload = function() { setTimeout(() => window.print(), 250); };<\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        function escapeHTML(value) {
+            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropdown-btn')) {
+                document.querySelectorAll('.dropdown-content').forEach(d => d.classList.remove('show'));
+            }
+            if (event.target === document.getElementById('add-quote-modal')) {
+                closeAddQuoteModal();
+            }
+            if (event.target === document.getElementById('report-quotes-modal')) {
+                closeQuotesReportModal();
+            }
+        }
+
+        // Inicialização
+        renderForm();
+        renderHistory();
+    </script>
+</body>
+</html>
