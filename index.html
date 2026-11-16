@@ -46,10 +46,12 @@
         .options-group label:hover{border-color:var(--primary);color:var(--primary-dark)}
         .options-group input[type=radio]{display:none}
         .options-group input[type=radio]:checked+label{color:#fff;border-color:transparent;box-shadow:0 4px 10px rgba(5,113,238,.16)}
-        .options-group input[value="Tem"]:checked+label{background:linear-gradient(135deg,#22a45b,#168a49)}
-        .options-group input[value="Não tem"]:checked+label{background:linear-gradient(135deg,#ef4444,#dc2626)}
+        .options-group input[value="Tem"]:checked+label,
+        .options-group input[value="Autenticado"]:checked+label{background:linear-gradient(135deg,#22a45b,#168a49)}
+        .options-group input[value="Não tem"]:checked+label,
+        .options-group input[value="Não autenticado"]:checked+label{background:linear-gradient(135deg,#ef4444,#dc2626)}
         .options-group input[value="Vencido"]:checked+label{background:linear-gradient(135deg,#b91c1c,#7f1d1d)}
-        .options-group input[type=radio]:checked:not([value="Tem"]):not([value="Não tem"]):not([value="Vencido"])+label{background:linear-gradient(135deg,#f6b800,#d98b00)}
+        .options-group input[type=radio]:checked:not([value="Tem"]):not([value="Não tem"]):not([value="Vencido"]):not([value="Autenticado"]):not([value="Não autenticado"])+label{background:linear-gradient(135deg,#f6b800,#d98b00)}
 
         .btn-add-quote{background:#eef7ff;color:#0565c9;border:1px solid #b9d9f8;padding:7px 11px;border-radius:999px;font-size:.75rem;font-weight:800;cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:4px}
         .btn-add-quote:hover{background:#0571ee;color:#fff;border-color:#0571ee}
@@ -81,7 +83,12 @@
         .observation-input{width:100%;min-height:48px;resize:vertical;padding:8px 10px;border:1px solid var(--border);border-radius:9px;outline:none;font-family:inherit;font-size:.84rem;color:var(--text);background:#fff}
         .observation-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(5,113,238,.10)}
         
-        .obs-aviso{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:12px 15px;border-radius:10px;font-size:0.84rem;font-weight:700;margin-top:24px;margin-bottom:8px}
+        .obs-aviso{background:#fffbeb;border:1px solid #fde68a;color:#92400e;padding:14px 16px;border-radius:12px;font-size:0.86rem;margin-top:24px;margin-bottom:8px;display:flex;flex-direction:column;gap:10px}
+        .obs-aviso-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+        .obs-aviso-title{font-weight:800;line-height:1.4;flex:1 1 280px}
+        .obs-aviso .options-group label{background:#fff;border-color:#fcd34d;color:#78350f}
+        .obs-aviso .options-group label:hover{border-color:#d97706;color:#92400e}
+        .obs-aviso .observation-wrapper{width:100%;flex-basis:100%}
 
         .actions{margin-top:18px;display:flex;gap:9px;flex-wrap:wrap}
         button{padding:11px 17px;border:none;border-radius:9px;font-weight:800;cursor:pointer;transition:.18s}
@@ -244,8 +251,30 @@
 
             <div id="form-content"></div>
 
-            <div class="obs-aviso" id="obs-aviso-text">
-                Obs: Autenticar todas as vias (nome completo e matrícula ou assinatura e carimbo de identificação).
+            <div class="obs-aviso" id="obs-aviso-box">
+                <div class="obs-aviso-top">
+                    <div class="obs-aviso-title">
+                        Obs: Autenticar todas as vias (nome completo e matrícula ou assinatura e carimbo de identificação).
+                    </div>
+                    <div class="options-group">
+                        <div>
+                            <input type="radio" name="autenticacao_vias" id="auth_opt0" value="Autenticado">
+                            <label for="auth_opt0">Autenticado</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="autenticacao_vias" id="auth_opt1" value="Não autenticado">
+                            <label for="auth_opt1">Não autenticado</label>
+                        </div>
+                        <div>
+                            <input type="radio" name="autenticacao_vias" id="auth_opt2" value="Autenticado parcialmente">
+                            <label for="auth_opt2">Autenticado parcialmente</label>
+                        </div>
+                    </div>
+                    <button type="button" class="observation-toggle" id="auth-obs-btn" onclick="toggleAuthObs()">📝 Observação</button>
+                </div>
+                <div class="observation-wrapper hidden" id="auth-obs-wrapper">
+                    <textarea id="autenticacao_vias_observation" class="observation-input" placeholder="Descreva o caso da autenticação (ex: quais vias ou documentos estão sem autenticação)..."></textarea>
+                </div>
             </div>
             
             <div class="actions">
@@ -285,7 +314,7 @@
             </div>
             <div class="modal-field">
                 <label for="quote-start-date">Data Inicial da Cotação *</label>
-                <input type="text" id="quote-start-date" placeholder="dd/mm/aaaa" maxlength="10" onblur="completeDateYear(this)">
+                <input type="text" id="quote-start-date" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" oninput="maskDateInput(this)" onblur="completeDateYear(this)">
             </div>
             <div class="mode-switch">
                 <button type="button" id="qmode-days" class="active" onclick="setQuoteMode('days')">Informar Dias de Validade</button>
@@ -297,7 +326,7 @@
             </div>
             <div class="modal-field" id="qfield-end-date" style="display:none;">
                 <label for="quote-end-date">Válida Até *</label>
-                <input type="text" id="quote-end-date" placeholder="dd/mm/aaaa" maxlength="10" onblur="completeDateYear(this)">
+                <input type="text" id="quote-end-date" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" oninput="maskDateInput(this)" onblur="completeDateYear(this)">
             </div>
             <div class="modal-actions">
                 <button type="button" style="background:#e2e8f0;color:#334155;" onclick="closeAddQuoteModal()">Fechar</button>
@@ -334,7 +363,7 @@
 
             <div class="modal-field">
                 <label for="doc-val-start">Data de Emissão / Assinatura / Início *</label>
-                <input type="text" id="doc-val-start" placeholder="dd/mm/aaaa" maxlength="10" onblur="completeDateYear(this); updateDocValidityPreview();" oninput="updateDocValidityPreview()">
+                <input type="text" id="doc-val-start" placeholder="dd/mm/aaaa" maxlength="10" inputmode="numeric" oninput="maskDateInput(this); updateDocValidityPreview();" onblur="completeDateYear(this); updateDocValidityPreview();">
             </div>
 
             <div class="modal-field" id="doc-val-aditivo-field" style="display:none;">
@@ -347,7 +376,7 @@
 
             <div class="modal-field" id="doc-val-custom-end-field" style="display:none;">
                 <label for="doc-val-custom-end">Ou informe Data Final Específica (Opcional)</label>
-                <input type="text" id="doc-val-custom-end" placeholder="dd/mm/aaaa (deixe vazio para 12 meses automáticos)" maxlength="10" onblur="completeDateYear(this); updateDocValidityPreview();" oninput="updateDocValidityPreview()">
+                <input type="text" id="doc-val-custom-end" placeholder="dd/mm/aaaa (deixe vazio para 12 meses automáticos)" maxlength="10" inputmode="numeric" oninput="maskDateInput(this); updateDocValidityPreview();" onblur="completeDateYear(this); updateDocValidityPreview();">
             </div>
 
             <div id="doc-val-preview" class="calc-preview-box">
@@ -890,15 +919,94 @@
             if (!isHidden) document.getElementById('doc-protocolo-obs').focus();
         }
 
+        function toggleAuthObs(forceOpen = null) {
+            const wrapper = document.getElementById('auth-obs-wrapper');
+            const btn = document.getElementById('auth-obs-btn');
+            const shouldOpen = forceOpen !== null ? forceOpen : wrapper.classList.contains('hidden');
+            wrapper.classList.toggle('hidden', !shouldOpen);
+            btn.classList.toggle('active', shouldOpen);
+            btn.textContent = shouldOpen ? '✕ Ocultar' : '📝 Observação';
+            if (shouldOpen) document.getElementById('autenticacao_vias_observation').focus();
+        }
+
+        function setupAuthRadios() {
+            document.querySelectorAll('input[name="autenticacao_vias"]').forEach(radio => {
+                radio.addEventListener('click', function() {
+                    if (this.dataset.wasChecked === "true") {
+                        this.checked = false;
+                        this.dataset.wasChecked = "false";
+                    } else {
+                        document.querySelectorAll('input[name="autenticacao_vias"]').forEach(r => r.dataset.wasChecked = "false");
+                        this.dataset.wasChecked = "true";
+                        if (this.value === 'Autenticado parcialmente') {
+                            toggleAuthObs(true);
+                        }
+                    }
+                });
+            });
+        }
+
+        function restoreAuthSection(formData) {
+            const savedAuth = formData['autenticacao_vias'] || '';
+            const savedAuthObs = formData['autenticacao_vias_observation'] || '';
+            document.querySelectorAll('input[name="autenticacao_vias"]').forEach(r => {
+                if (r.value === savedAuth) {
+                    r.checked = true;
+                    r.dataset.wasChecked = "true";
+                } else {
+                    r.checked = false;
+                    r.dataset.wasChecked = "false";
+                }
+            });
+            document.getElementById('autenticacao_vias_observation').value = savedAuthObs;
+            const shouldShowObs = Boolean(savedAuthObs.trim()) || savedAuth === 'Autenticado parcialmente';
+            const wrapper = document.getElementById('auth-obs-wrapper');
+            const btn = document.getElementById('auth-obs-btn');
+            wrapper.classList.toggle('hidden', !shouldShowObs);
+            btn.classList.toggle('active', shouldShowObs);
+            btn.textContent = shouldShowObs ? '✕ Ocultar' : '📝 Observação';
+        }
+
+        // Insere automaticamente as barras (dd/mm/aaaa) enquanto o usuário digita apenas números
+        function maskDateInput(input) {
+            let digits = (input.value || '').replace(/\D/g, '').slice(0, 8);
+            if (digits.length > 4) {
+                input.value = `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+            } else if (digits.length > 2) {
+                input.value = `${digits.slice(0, 2)}/${digits.slice(2)}`;
+            } else {
+                input.value = digits;
+            }
+        }
+
+        // Completa o ano corrente automaticamente ao pressionar TAB ou sair do campo se só informou dia e mês
         function completeDateYear(input) {
-            const value = (input.value || '').trim();
-            const match = value.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2}|\d{4}))?$/);
-            if (!match) return;
-            const day = String(match[1]).padStart(2, '0');
-            const month = String(match[2]).padStart(2, '0');
-            let year = match[3] || String(new Date().getFullYear());
+            const raw = (input.value || '').trim();
+            if (!raw) return;
+
+            let dayStr = '', monthStr = '', yearStr = '';
+            const digitsOnly = raw.replace(/\D/g, '');
+
+            if (!raw.includes('/') && (digitsOnly.length === 4 || digitsOnly.length === 6 || digitsOnly.length === 8)) {
+                dayStr = digitsOnly.slice(0, 2);
+                monthStr = digitsOnly.slice(2, 4);
+                yearStr = digitsOnly.slice(4);
+            } else {
+                const match = raw.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{0,4}))?$/);
+                if (!match) return;
+                dayStr = match[1];
+                monthStr = match[2];
+                yearStr = match[3] || '';
+            }
+
+            const day = String(dayStr).padStart(2, '0');
+            const month = String(monthStr).padStart(2, '0');
+            let year = yearStr || String(new Date().getFullYear());
             if (year.length === 2) year = `20${year}`;
-            input.value = `${day}/${month}/${year}`;
+
+            if (year.length === 4) {
+                input.value = `${day}/${month}/${year}`;
+            }
         }
 
         function parseDateBR(value) {
@@ -1054,6 +1162,8 @@
                 protoObsBtn.textContent = '📝 Observação';
             }
 
+            restoreAuthSection(formData);
+
             const cfg = checklistsConfig[currentChecklistKey];
 
             cfg.sections.forEach((section, secIndex) => {
@@ -1192,9 +1302,11 @@
                 dateInput.id = `${inputId}_date`;
                 dateInput.className = 'date-input';
                 dateInput.placeholder = 'dd/mm/aaaa';
+                dateInput.maxLength = 10;
                 dateInput.inputMode = 'numeric';
                 dateInput.value = savedDate;
                 
+                dateInput.addEventListener('input', () => maskDateInput(dateInput));
                 dateInput.addEventListener('blur', () => updateDateStatus(inputId));
                 dateInput.addEventListener('change', () => updateDateStatus(inputId));
                 row.appendChild(dateInput);
@@ -1634,6 +1746,10 @@
             formData['secretaria'] = document.getElementById('doc-secretaria').value;
             formData['protocolo_obs'] = document.getElementById('doc-protocolo-obs').value;
 
+            const authSelected = document.querySelector('input[name="autenticacao_vias"]:checked');
+            formData['autenticacao_vias'] = authSelected ? authSelected.value : '';
+            formData['autenticacao_vias_observation'] = document.getElementById('autenticacao_vias_observation').value || '';
+
             const cfg = checklistsConfig[currentChecklistKey];
             cfg.sections.forEach((section, secIndex) => {
                 const sectionAllowsDate = section.allowDate !== false;
@@ -1855,6 +1971,7 @@
             document.getElementById('proto-obs-wrapper').classList.add('hidden');
             document.getElementById('proto-obs-btn').classList.remove('active');
             document.getElementById('proto-obs-btn').textContent = '📝 Observação';
+            restoreAuthSection({});
             renderForm();
         }
 
@@ -1870,6 +1987,8 @@
             const secretariaSigla = formData['secretaria'] ? `Secretaria Demandante: ${escapeHTML(formData['secretaria'])}` : '';
             const metaDetails = [protocoloNum, secretariaSigla].filter(Boolean).join(' | ');
             const protoObs = (formData['protocolo_obs'] || '').trim();
+            const authStatus = formData['autenticacao_vias'] || 'Não informado';
+            const authObs = (formData['autenticacao_vias_observation'] || '').trim();
 
             let sectionsHTML = '';
             cfg.sections.forEach((section, secIndex) => {
@@ -1958,6 +2077,7 @@
                         tr { page-break-inside: avoid; }
                         .col-doc { width: 72%; }
                         .col-sit { width: 28%; }
+                        .auth-box { margin-top: 15px; border: 1px solid #cbd5e1; background: #f8fafc; padding: 8px 10px; border-radius: 4px; font-size: 10px; }
                         .footer { margin-top: 20px; font-size: 9px; color: #64748b; border-top: 1px solid #cbd5e1; padding-top: 6px; }
                     </style>
                 </head>
@@ -1970,8 +2090,10 @@
                         ${protoObs ? `<div class="meta" style="margin-top:4px;color:#1e293b;"><strong>Observação do Protocolo:</strong> ${escapeHTML(protoObs)}</div>` : ''}
                     </div>
                     ${sectionsHTML}
-                    <div style="margin-top:15px;font-weight:bold;font-size:10px;">
-                        Obs: Autenticar todas as vias (nome completo e matrícula ou assinatura e carimbo de identificação).
+                    <div class="auth-box">
+                        <strong>Obs: Autenticar todas as vias (nome completo e matrícula ou assinatura e carimbo de identificação).</strong><br>
+                        Situação da Autenticação: <strong>${escapeHTML(authStatus)}</strong>
+                        ${authObs ? `<br><strong>Observação:</strong> ${escapeHTML(authObs)}` : ''}
                     </div>
                     <div class="footer">Gerenciado pelo Sistema de Controle de Licitações e Contratos.</div>
                     <script>window.onload = function() { setTimeout(() => window.print(), 250); };<\/script>
@@ -2000,6 +2122,7 @@
             }
         }
 
+        setupAuthRadios();
         renderForm();
         renderHistory();
     </script>
