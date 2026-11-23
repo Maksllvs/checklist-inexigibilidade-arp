@@ -66,6 +66,9 @@
         .btn-add-quote:hover .pill-mini-count{background:#fff;color:#0571ee}
         .pill-mini-count{background:#0571ee;color:#fff;padding:1px 6px;border-radius:999px;font-size:.68rem;font-weight:800;transition:.18s}
 
+        .dotacao-inline-total{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;padding:6px 11px;border-radius:999px;font-size:.75rem;font-weight:800;display:inline-flex;align-items:center;gap:4px}
+        .dotacao-inline-total.hidden{display:none}
+
         .validity-trigger-btn{background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;padding:7px 11px;border-radius:999px;font-size:.75rem;font-weight:800;cursor:pointer;transition:.18s;display:inline-flex;align-items:center;gap:5px}
         .validity-trigger-btn:hover{background:#16a34a;color:#fff;border-color:#16a34a}
         .validity-trigger-btn.status-warning{background:#fffbeb;color:#b45309;border-color:#fde68a}
@@ -187,16 +190,22 @@
         .quote-warning-msg{margin-top:5px;font-size:0.76rem;font-weight:800;color:#b45309;background:#fef3c7;padding:4px 8px;border-radius:6px;display:inline-block}
 
         /* Estilos específicos do Modal de Dotações */
-        .dotacao-input-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:end;background:#f8fbff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px}
+        .dotacao-input-grid{display:grid;grid-template-columns:110px 1fr 1fr auto;gap:10px;align-items:end;background:#f8fbff;border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px}
         .dotacao-input-grid .modal-field{margin-bottom:0}
         .dotacao-list{display:flex;flex-direction:column;gap:8px;max-height:260px;overflow-y:auto;margin-bottom:14px}
         .dotacao-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 14px;border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:10px;background:#fff}
-        .dotacao-info{font-size:0.88rem;color:var(--text);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+        .dotacao-info{font-size:0.88rem;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+        .dotacao-year-badge{background:#fef3c7;color:#92400e;border:1px solid #fde68a;padding:3px 8px;border-radius:7px;font-weight:800;font-size:0.78rem}
         .dotacao-num-badge{background:#eef7ff;color:#0565c9;border:1px solid #b9d9f8;padding:3px 9px;border-radius:7px;font-weight:800;font-size:0.82rem}
         .dotacao-val-text{font-weight:800;color:#15803d;font-size:0.92rem}
-        .dotacao-total-bar{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:12px;background:linear-gradient(135deg,#eef7ff,#e0f2fe);border:1px solid #b9d9f8;color:#075da9}
-        .dotacao-total-bar span{font-size:0.85rem;font-weight:800}
-        .dotacao-total-bar strong{font-size:1.25rem;font-weight:900;color:#0565c9}
+        .dotacao-total-bar{display:flex;flex-direction:column;gap:10px;padding:14px 16px;border-radius:12px;background:linear-gradient(135deg,#eef7ff,#e0f2fe);border:1px solid #b9d9f8;color:#075da9}
+        .dotacao-total-main{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+        .dotacao-total-main span{font-size:0.85rem;font-weight:800}
+        .dotacao-total-main strong{font-size:1.25rem;font-weight:900;color:#0565c9}
+        .dotacao-years-breakdown{display:flex;gap:8px;flex-wrap:wrap;padding-top:9px;border-top:1px dashed #93c5fd}
+        .dotacao-years-breakdown.hidden{display:none}
+        .year-breakdown-chip{background:#fff;border:1px solid #bae6fd;color:#075da9;padding:4px 10px;border-radius:8px;font-size:0.78rem;font-weight:750}
+        .year-breakdown-chip strong{color:#15803d;font-weight:800}
 
         @media(max-width:960px){
             body{padding:12px}
@@ -334,10 +343,14 @@
                 <button type="button" class="modal-close" onclick="closeDotacaoModal()">✕</button>
             </div>
             <p style="font-size:0.8rem;color:var(--muted);margin-top:-8px;margin-bottom:14px;line-height:1.4;">
-                Informe o número próprio de cada dotação (ex: 234, 578, 958) e o respectivo valor atribuído para somar o total do processo.
+                Informe o exercício (ano), o número próprio de cada dotação (ex: 234, 578, 958) e o respectivo valor atribuído para somar o total geral e por ano.
             </p>
 
             <div class="dotacao-input-grid">
+                <div class="modal-field">
+                    <label for="dotacao-ano">Ano / Exercício *</label>
+                    <input type="text" id="dotacao-ano" placeholder="2026" maxlength="4" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '').slice(0, 4)" onkeydown="if(event.key==='Enter'){event.preventDefault(); document.getElementById('dotacao-numero').focus();}">
+                </div>
                 <div class="modal-field">
                     <label for="dotacao-numero">Número da Dotação *</label>
                     <input type="text" id="dotacao-numero" placeholder="Ex: 234" onkeydown="if(event.key==='Enter'){event.preventDefault(); document.getElementById('dotacao-valor').focus();}">
@@ -352,8 +365,11 @@
             <div id="dotacao-list-container" class="dotacao-list"></div>
 
             <div class="dotacao-total-bar">
-                <span>Valor Total das Dotações (<span id="dotacao-total-itens">0</span>):</span>
-                <strong id="dotacao-total-valor">R$ 0,00</strong>
+                <div class="dotacao-total-main">
+                    <span>Valor Total das Dotações (<span id="dotacao-total-itens">0</span>):</span>
+                    <strong id="dotacao-total-valor">R$ 0,00</strong>
+                </div>
+                <div id="dotacao-years-breakdown" class="dotacao-years-breakdown hidden"></div>
             </div>
 
             <div class="modal-actions">
@@ -1351,6 +1367,30 @@
             if (badge) {
                 badge.textContent = currentDotacoes.length;
             }
+
+            const totalBadge = document.getElementById('dotacao-inline-total');
+            if (totalBadge) {
+                const totalSum = currentDotacoes.reduce((acc, item) => acc + (Number(item.valor) || 0), 0);
+                if (currentDotacoes.length > 0) {
+                    totalBadge.textContent = `Total: ${formatCurrencyBRL(totalSum)}`;
+                    totalBadge.classList.remove('hidden');
+                } else {
+                    totalBadge.classList.add('hidden');
+                }
+            }
+        }
+
+        function getDotacoesBreakdownByYear(dotacoesList) {
+            const map = {};
+            (dotacoesList || []).forEach(d => {
+                const yearKey = (d.ano && String(d.ano).trim()) ? String(d.ano).trim() : 'Sem ano';
+                map[yearKey] = (map[yearKey] || 0) + (Number(d.valor) || 0);
+            });
+            return Object.entries(map).sort((a, b) => {
+                if (a[0] === 'Sem ano') return 1;
+                if (b[0] === 'Sem ano') return -1;
+                return a[0].localeCompare(b[0], undefined, { numeric: true });
+            });
         }
 
         function renderForm(savedRecord = null) {
@@ -1509,6 +1549,13 @@
                 addDotacaoBtn.innerHTML = `➕ Adicionar dotação <span class="pill-mini-count" id="dotacao-count-pill">${currentDotacoes.length}</span>`;
                 addDotacaoBtn.onclick = openDotacaoModal;
                 optionsGroup.appendChild(addDotacaoBtn);
+
+                const totalSum = currentDotacoes.reduce((acc, d) => acc + (Number(d.valor) || 0), 0);
+                const inlineTotalSpan = document.createElement('span');
+                inlineTotalSpan.id = 'dotacao-inline-total';
+                inlineTotalSpan.className = `dotacao-inline-total ${currentDotacoes.length > 0 ? '' : 'hidden'}`;
+                inlineTotalSpan.textContent = `Total: ${formatCurrencyBRL(totalSum)}`;
+                optionsGroup.appendChild(inlineTotalSpan);
             }
 
             if (item.hasQuoteAction) {
@@ -1620,6 +1667,10 @@
 
         // Funções do Modal de Dotações Orçamentárias
         function openDotacaoModal() {
+            const anoInput = document.getElementById('dotacao-ano');
+            if (!anoInput.value.trim()) {
+                anoInput.value = String(new Date().getFullYear());
+            }
             document.getElementById('dotacao-numero').value = '';
             document.getElementById('dotacao-valor').value = '';
             renderDotacoesList();
@@ -1632,11 +1683,19 @@
         }
 
         function addDotacao() {
+            const anoInput = document.getElementById('dotacao-ano');
             const numInput = document.getElementById('dotacao-numero');
             const valInput = document.getElementById('dotacao-valor');
 
+            const ano = (anoInput.value || '').trim();
             const numero = (numInput.value || '').trim();
             const valor = parseCurrencyBRL(valInput.value);
+
+            if (!/^\d{4}$/.test(ano)) {
+                alert('Informe um ano válido com 4 dígitos (ex: 2026, 2027).');
+                anoInput.focus();
+                return;
+            }
 
             if (!numero) {
                 alert('Informe o número da dotação (ex: 234, 578, 958).');
@@ -1652,6 +1711,7 @@
 
             currentDotacoes.push({
                 id: Date.now().toString() + Math.random().toString(36).slice(2, 6),
+                ano: ano,
                 numero: numero,
                 valor: valor
             });
@@ -1674,28 +1734,46 @@
             const container = document.getElementById('dotacao-list-container');
             const totalItensEl = document.getElementById('dotacao-total-itens');
             const totalValorEl = document.getElementById('dotacao-total-valor');
+            const yearsBreakdownEl = document.getElementById('dotacao-years-breakdown');
 
             const totalSum = currentDotacoes.reduce((acc, item) => acc + (Number(item.valor) || 0), 0);
             totalItensEl.textContent = `${currentDotacoes.length} ${currentDotacoes.length === 1 ? 'dotação' : 'dotações'}`;
             totalValorEl.textContent = formatCurrencyBRL(totalSum);
 
+            const yearEntries = getDotacoesBreakdownByYear(currentDotacoes);
+            if (yearEntries.length > 0) {
+                yearsBreakdownEl.classList.remove('hidden');
+                yearsBreakdownEl.innerHTML = yearEntries.map(([year, sum]) => `
+                    <div class="year-breakdown-chip">
+                        Ano ${escapeHTML(year)}: <strong>${formatCurrencyBRL(sum)}</strong>
+                    </div>
+                `).join('');
+            } else {
+                yearsBreakdownEl.classList.add('hidden');
+                yearsBreakdownEl.innerHTML = '';
+            }
+
             if (!currentDotacoes.length) {
                 container.innerHTML = `<div style="text-align:center;padding:20px;color:var(--muted);font-size:0.85rem;border:1px dashed var(--border);border-radius:10px;">
-                    Nenhuma dotação adicionada ainda.<br>Preencha o número da dotação e o valor acima para incluir.
+                    Nenhuma dotação adicionada ainda.<br>Preencha o ano, o número da dotação e o valor acima para incluir.
                 </div>`;
                 return;
             }
 
-            container.innerHTML = currentDotacoes.map(d => `
-                <div class="dotacao-row">
-                    <div class="dotacao-info">
-                        <span class="dotacao-num-badge">Dotação: ${escapeHTML(d.numero)}</span>
-                        <span>—</span>
-                        <span class="dotacao-val-text">${formatCurrencyBRL(d.valor)}</span>
+            container.innerHTML = currentDotacoes.map(d => {
+                const anoTag = d.ano ? `<span class="dotacao-year-badge">Ano: ${escapeHTML(d.ano)}</span>` : '';
+                return `
+                    <div class="dotacao-row">
+                        <div class="dotacao-info">
+                            ${anoTag}
+                            <span class="dotacao-num-badge">Dotação: ${escapeHTML(d.numero)}</span>
+                            <span>—</span>
+                            <span class="dotacao-val-text">${formatCurrencyBRL(d.valor)}</span>
+                        </div>
+                        <button type="button" class="history-btn btn-delete" onclick="removeDotacao('${d.id}')">Excluir</button>
                     </div>
-                    <button type="button" class="history-btn btn-delete" onclick="removeDotacao('${d.id}')">Excluir</button>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function openDocValidityModal(inputId, rule, itemText) {
@@ -2414,12 +2492,25 @@
 
             if (Array.isArray(record.dotacoes) && record.dotacoes.length > 0) {
                 const totalDotacoes = record.dotacoes.reduce((acc, d) => acc + (Number(d.valor) || 0), 0);
-                const dotacaoRows = record.dotacoes.map(d => `
-                    <tr>
-                        <td class="col-doc"><strong>Dotação: ${escapeHTML(d.numero)}</strong></td>
-                        <td class="col-sit">${escapeHTML(formatCurrencyBRL(d.valor))}</td>
-                    </tr>
-                `).join('');
+                const yearEntries = getDotacoesBreakdownByYear(record.dotacoes);
+                const dotacaoRows = record.dotacoes.map(d => {
+                    const anoLabel = d.ano ? `Ano ${escapeHTML(d.ano)} — ` : '';
+                    return `
+                        <tr>
+                            <td class="col-doc">${anoLabel}<strong>Dotação: ${escapeHTML(d.numero)}</strong></td>
+                            <td class="col-sit">${escapeHTML(formatCurrencyBRL(d.valor))}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                const yearSubtotalRows = yearEntries.length > 0
+                    ? yearEntries.map(([year, sum]) => `
+                        <tr style="background:#f8fafc;">
+                            <td class="col-doc">Subtotal Exercício ${escapeHTML(year)}</td>
+                            <td class="col-sit"><strong>${escapeHTML(formatCurrencyBRL(sum))}</strong></td>
+                        </tr>
+                    `).join('')
+                    : '';
 
                 sectionsHTML += `
                     <h2>Dotações Orçamentárias</h2>
@@ -2428,9 +2519,10 @@
                             <col style="width: 72%;">
                             <col style="width: 28%;">
                         </colgroup>
-                        <thead><tr><th class="col-doc">Número da Dotação</th><th class="col-sit">Valor Atribuído</th></tr></thead>
+                        <thead><tr><th class="col-doc">Exercício / Número da Dotação</th><th class="col-sit">Valor Atribuído</th></tr></thead>
                         <tbody>
                             ${dotacaoRows}
+                            ${yearSubtotalRows}
                             <tr style="background:#f1f5f9;">
                                 <td class="col-doc"><strong>Total Geral das Dotações (${record.dotacoes.length})</strong></td>
                                 <td class="col-sit"><strong>${escapeHTML(formatCurrencyBRL(totalDotacoes))}</strong></td>
