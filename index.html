@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checklist - Inexigibilidade e Adesão à ARP</title>
+    <title>Checklist - Inexigibilidade, Adesão e Participação em ARP</title>
     <style>
         :root{--primary:#0571ee;--primary-dark:#045fc7;--secondary:#05abff;--green:#35a853;--yellow:#f6c400;--red:#dc2626;--bg:#f3f7fb;--surface:#fff;--surface-soft:#f5f8fc;--border:#d9e2ec;--text:#19324a;--muted:#66788a;--shadow:0 14px 35px rgba(25,50,74,.10)}
         *{box-sizing:border-box}body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(180deg,#eef6ff 0,#f7fafc 45%,#f2f7f5 100%);color:var(--text);margin:0;padding:24px;min-height:100vh}
@@ -226,6 +226,7 @@
             <button class="sel-btn" id="btn-inex_loc_pj" onclick="switchChecklist('inex_loc_pj')">Inexigibilidade - Locação Imóvel (PJ)</button>
             <button class="sel-btn" id="btn-inex_loc_pf" onclick="switchChecklist('inex_loc_pf')">Inexigibilidade - Locação Imóvel (PF)</button>
             <button class="sel-btn" id="btn-adesao" onclick="switchChecklist('adesao')">Adesão à Ata de Registro de Preços (ARP)</button>
+            <button class="sel-btn" id="btn-participacao_rp" onclick="switchChecklist('participacao_rp')">Participação em Registro de Preço</button>
         </div>
     </div>
 
@@ -968,6 +969,76 @@
                             { text: "Cópia das publicações da ARP no PNCP;" },
                             { text: "Minuta do contrato a ser assinado com a empresa fornecedora;" },
                             { text: "Fluxo da modalidade (verificar item no sistema, listar itens/quantidades, dotação e banco de preço)." }
+                        ]
+                    }
+                ]
+            },
+            participacao_rp: {
+                title: "Check List - Participação em Registro de Preço",
+                sections: [
+                    {
+                        section: "Planejamento e Fluxo",
+                        allowDate: false,
+                        items: [
+                            { text: "Oficio da secretaria demandante;" }, //[cite: 2]
+                            { text: "Estudo técnico preliminar – ETP;" }, //[cite: 2]
+                            { text: "Comprovação de Inclusão no PAC;" }, //[cite: 2]
+                            { text: "Termo de referência;" }, //[cite: 2]
+                            { text: "Classificação orçamentaria autorizado pela equipe econômica;", hasDotacaoAction: true }, //[cite: 2]
+                            { text: "Declaração de que não possui ata/contrato ou processos em andamento;" }, //[cite: 2]
+                            { text: "Fluxo da modalidade (verificar se o item tem cadastro, fazer a lista no sistema informando seus itens e quantidades, informar a dotação e realizar o banco de preço (e balizar pelo menor valor)." } //[cite: 2]
+                        ]
+                    },
+                    {
+                        section: "Anexos",
+                        isBudgetSection: true,
+                        allowDate: false,
+                        items: [
+                            {
+                                text: "Ata de registro de preços objeto da adesão (cópia da original assinada);", //[cite: 2]
+                                validityRule: {
+                                    type: 'arp',
+                                    label: 'Vigência da Ata de Registro de Preços (ARP)',
+                                    description: 'Vigência padrão de 12 meses (1 ano) a partir da assinatura/publicação, podendo ser aditivada por mais 1 ano (24 meses).'
+                                }
+                            },
+                            {
+                                text: "Manifestação/anuência do órgão gerenciador da ata;", //[cite: 2]
+                                validityRule: {
+                                    type: 'days',
+                                    days: 90,
+                                    label: 'Anuência do Órgão Gerenciador (90 dias)',
+                                    description: 'A manifestação/anuência do órgão gerenciador possui validade de 90 dias a partir da emissão.'
+                                }
+                            },
+                            { text: "Ofício de Intenção de Registro de Preço do órgão ou secretaria interessada para o órgão (prefeitura, governo do estado, governo federal, exércitos e afins) gerenciador da ata;" }, //[cite: 2]
+                            { text: "Aceite da empresa fornecedora;" }, //[cite: 2]
+                            { text: "Demonstração da vantajosidade econômica da adesão mediante pesquisa de mercado (orçamentos válido contendo todos itens solicitados);", hasQuoteAction: true }, //[cite: 2]
+                            { text: "Formação do preço estimado (método, fontes de pesquisa, responsável pela estimativa, balizamento de preços, orçamentos de outras empresas);" }, //[cite: 2]
+                            {
+                                text: "Comprovante de comunicação ao tce-mt (autorização para adesão a arp – aplic – emitido pelo orgão gerenciador da arp;", //[cite: 2]
+                                customOptions: ['Tem', 'Não tem', 'Fora do estado']
+                            },
+                            { text: "Cópia do edital e seus anexos, termo de referência do edital, aviso de licitação, ata de sessão de abertura e julgamento de licitação, publicação de aviso de resultado de licitação, termo de adjudicação, termo de homologação;" }, //[cite: 2]
+                            { text: "Cópia das publicações da ARP no PNCP;" }, //[cite: 2]
+                            { text: "Parecer Jurídico);" } //[cite: 2]
+                        ]
+                    },
+                    {
+                        section: "Documentação Jurídico Fiscal",
+                        allowDate: true,
+                        items: [
+                            { text: "Cópia do contrato social ou estatuto e a última alteração (se houver);", noDate: true }, //[cite: 2]
+                            { text: "Cópia dos documentos pessoais dos sócios (rg e cpf);", noDate: true }, //[cite: 2]
+                            { text: "Alvará em vigência;" }, //[cite: 2]
+                            { text: "Certidão conjunta negativa de débitos federais (receita federal);" }, //[cite: 2]
+                            { text: "Certidão negativa de débitos estaduais (local da empresa);" }, //[cite: 2]
+                            { text: "Certidão negativa de débitos municipais (local da empresa);" }, //[cite: 2]
+                            { text: "Certidão negativa de débitos fgts;" }, //[cite: 2]
+                            { text: "Certidão negativa de débitos trabalhistas;" }, //[cite: 2]
+                            { text: "Declaração de que não possui fatos impeditivos à licitação;", noDate: true }, //[cite: 2]
+                            { text: "Cartão cnpj;", noDate: true }, //[cite: 2]
+                            { text: "Declaração de que não emprega menor;", noDate: true } //[cite: 2]
                         ]
                     }
                 ]
