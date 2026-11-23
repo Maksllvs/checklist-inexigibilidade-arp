@@ -33,6 +33,13 @@
         .title-input{width:100%;font-size:clamp(1.15rem,2vw,1.6rem);font-weight:850;border:0;border-bottom:3px solid var(--primary);padding:10px 4px 12px;margin-bottom:22px;background:transparent;color:var(--text);outline:none}
         h2{margin-top:0;font-size:1.3rem;color:#075da9}
         h3.section-header{color:#fff;background:linear-gradient(90deg,#0571ee,#05abff);border:0;padding:11px 15px;border-radius:10px;margin:26px 0 7px;box-shadow:0 7px 16px rgba(5,113,238,.16);font-size:.96rem;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+
+        .empresa-ident-box{background:#f8fbff;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;display:grid;grid-template-columns:1.6fr 1fr;gap:14px}
+        .empresa-field{display:flex;flex-direction:column;gap:5px}
+        .empresa-field label{font-size:0.78rem;font-weight:800;color:#1e293b}
+        .empresa-input{width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:8px;font-size:0.88rem;font-family:inherit;color:var(--text);background:#fff;outline:none;transition:.18s}
+        .empresa-input::placeholder{color:#94a3b8}
+        .empresa-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(5,113,238,.10)}
         
         .btn-header-report{background:#fff;color:#0565c9;border:none;padding:6px 12px;border-radius:8px;font-size:0.76rem;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 2px 6px rgba(0,0,0,0.12);transition:.18s}
         .btn-header-report:hover{background:#eef7ff;transform:translateY(-1px)}
@@ -198,6 +205,7 @@
             .layout{flex-direction:column}
             .app-container,.history-container{width:100%;padding:18px}
             .history-container{position:static}
+            .empresa-ident-box{grid-template-columns:1fr}
             .item-row{align-items:stretch;flex-direction:column}
             .options-group{justify-content:flex-start}
             .observation-wrapper{min-width:0;width:100%}
@@ -602,6 +610,7 @@
                     },
                     {
                         section: "Documentações para Pessoa Jurídica",
+                        hasCompanyFields: true,
                         allowDate: true,
                         items: [
                             { text: "Cópia do contrato social e a última alteração (se houver);", noDate: true },
@@ -773,6 +782,7 @@
                     },
                     {
                         section: "Documentações para Pessoa Jurídica",
+                        hasCompanyFields: true,
                         allowDate: true,
                         items: [
                             { text: "Cópia do contrato social e a última alteração (se houver);", noDate: true },
@@ -943,6 +953,7 @@
                     },
                     {
                         section: "Documentação Jurídico Fiscal",
+                        hasCompanyFields: true,
                         allowDate: true,
                         items: [
                             { text: "Cópia do contrato social ou estatuto e a última alteração (se houver);", noDate: true },
@@ -980,13 +991,13 @@
                         section: "Planejamento e Fluxo",
                         allowDate: false,
                         items: [
-                            { text: "Oficio da secretaria demandante;" }, //[cite: 2]
-                            { text: "Estudo técnico preliminar – ETP;" }, //[cite: 2]
-                            { text: "Comprovação de Inclusão no PAC;" }, //[cite: 2]
-                            { text: "Termo de referência;" }, //[cite: 2]
-                            { text: "Classificação orçamentaria autorizado pela equipe econômica;", hasDotacaoAction: true }, //[cite: 2]
-                            { text: "Declaração de que não possui ata/contrato ou processos em andamento;" }, //[cite: 2]
-                            { text: "Fluxo da modalidade (verificar se o item tem cadastro, fazer a lista no sistema informando seus itens e quantidades, informar a dotação e realizar o banco de preço (e balizar pelo menor valor)." } //[cite: 2]
+                            { text: "Oficio da secretaria demandante;" },
+                            { text: "Estudo técnico preliminar – ETP;" },
+                            { text: "Comprovação de Inclusão no PAC;" },
+                            { text: "Termo de referência;" },
+                            { text: "Classificação orçamentaria autorizado pela equipe econômica;", hasDotacaoAction: true },
+                            { text: "Declaração de que não possui ata/contrato ou processos em andamento;" },
+                            { text: "Fluxo da modalidade (verificar se o item tem cadastro, fazer a lista no sistema informando seus itens e quantidades, informar a dotação e realizar o banco de preço (e balizar pelo menor valor)." }
                         ]
                     },
                     {
@@ -995,7 +1006,7 @@
                         allowDate: false,
                         items: [
                             {
-                                text: "Ata de registro de preços objeto da adesão (cópia da original assinada);", //[cite: 2]
+                                text: "Ata de registro de preços objeto da adesão (cópia da original assinada);",
                                 validityRule: {
                                     type: 'arp',
                                     label: 'Vigência da Ata de Registro de Preços (ARP)',
@@ -1003,7 +1014,7 @@
                                 }
                             },
                             {
-                                text: "Manifestação/anuência do órgão gerenciador da ata;", //[cite: 2]
+                                text: "Manifestação/anuência do órgão gerenciador da ata;",
                                 validityRule: {
                                     type: 'days',
                                     days: 90,
@@ -1011,34 +1022,35 @@
                                     description: 'A manifestação/anuência do órgão gerenciador possui validade de 90 dias a partir da emissão.'
                                 }
                             },
-                            { text: "Ofício de Intenção de Registro de Preço do órgão ou secretaria interessada para o órgão (prefeitura, governo do estado, governo federal, exércitos e afins) gerenciador da ata;" }, //[cite: 2]
-                            { text: "Aceite da empresa fornecedora;" }, //[cite: 2]
-                            { text: "Demonstração da vantajosidade econômica da adesão mediante pesquisa de mercado (orçamentos válido contendo todos itens solicitados);", hasQuoteAction: true }, //[cite: 2]
-                            { text: "Formação do preço estimado (método, fontes de pesquisa, responsável pela estimativa, balizamento de preços, orçamentos de outras empresas);" }, //[cite: 2]
+                            { text: "Ofício de Intenção de Registro de Preço do órgão ou secretaria interessada para o órgão (prefeitura, governo do estado, governo federal, exércitos e afins) gerenciador da ata;" },
+                            { text: "Aceite da empresa fornecedora;" },
+                            { text: "Demonstração da vantajosidade econômica da adesão mediante pesquisa de mercado (orçamentos válido contendo todos itens solicitados);", hasQuoteAction: true },
+                            { text: "Formação do preço estimado (método, fontes de pesquisa, responsável pela estimativa, balizamento de preços, orçamentos de outras empresas);" },
                             {
-                                text: "Comprovante de comunicação ao tce-mt (autorização para adesão a arp – aplic – emitido pelo orgão gerenciador da arp;", //[cite: 2]
+                                text: "Comprovante de comunicação ao tce-mt (autorização para adesão a arp – aplic – emitido pelo orgão gerenciador da arp;",
                                 customOptions: ['Tem', 'Não tem', 'Fora do estado']
                             },
-                            { text: "Cópia do edital e seus anexos, termo de referência do edital, aviso de licitação, ata de sessão de abertura e julgamento de licitação, publicação de aviso de resultado de licitação, termo de adjudicação, termo de homologação;" }, //[cite: 2]
-                            { text: "Cópia das publicações da ARP no PNCP;" }, //[cite: 2]
-                            { text: "Parecer Jurídico);" } //[cite: 2]
+                            { text: "Cópia do edital e seus anexos, termo de referência do edital, aviso de licitação, ata de sessão de abertura e julgamento de licitação, publicação de aviso de resultado de licitação, termo de adjudicação, termo de homologação;" },
+                            { text: "Cópia das publicações da ARP no PNCP;" },
+                            { text: "Parecer Jurídico);" }
                         ]
                     },
                     {
                         section: "Documentação Jurídico Fiscal",
+                        hasCompanyFields: true,
                         allowDate: true,
                         items: [
-                            { text: "Cópia do contrato social ou estatuto e a última alteração (se houver);", noDate: true }, //[cite: 2]
-                            { text: "Cópia dos documentos pessoais dos sócios (rg e cpf);", noDate: true }, //[cite: 2]
-                            { text: "Alvará em vigência;" }, //[cite: 2]
-                            { text: "Certidão conjunta negativa de débitos federais (receita federal);" }, //[cite: 2]
-                            { text: "Certidão negativa de débitos estaduais (local da empresa);" }, //[cite: 2]
-                            { text: "Certidão negativa de débitos municipais (local da empresa);" }, //[cite: 2]
-                            { text: "Certidão negativa de débitos fgts;" }, //[cite: 2]
-                            { text: "Certidão negativa de débitos trabalhistas;" }, //[cite: 2]
-                            { text: "Declaração de que não possui fatos impeditivos à licitação;", noDate: true }, //[cite: 2]
-                            { text: "Cartão cnpj;", noDate: true }, //[cite: 2]
-                            { text: "Declaração de que não emprega menor;", noDate: true } //[cite: 2]
+                            { text: "Cópia do contrato social ou estatuto e a última alteração (se houver);", noDate: true },
+                            { text: "Cópia dos documentos pessoais dos sócios (rg e cpf);", noDate: true },
+                            { text: "Alvará em vigência;" },
+                            { text: "Certidão conjunta negativa de débitos federais (receita federal);" },
+                            { text: "Certidão negativa de débitos estaduais (local da empresa);" },
+                            { text: "Certidão negativa de débitos municipais (local da empresa);" },
+                            { text: "Certidão negativa de débitos fgts;" },
+                            { text: "Certidão negativa de débitos trabalhistas;" },
+                            { text: "Declaração de que não possui fatos impeditivos à licitação;", noDate: true },
+                            { text: "Cartão cnpj;", noDate: true },
+                            { text: "Declaração de que não emprega menor;", noDate: true }
                         ]
                     }
                 ]
@@ -1128,6 +1140,22 @@
             wrapper.classList.toggle('hidden', !shouldShowObs);
             btn.classList.toggle('active', shouldShowObs);
             btn.textContent = shouldShowObs ? '✕ Ocultar' : '📝 Observação';
+        }
+
+        // Máscara automática de CNPJ (00.000.000/0000-00) apenas com números
+        function maskCNPJInput(input) {
+            let digits = (input.value || '').replace(/\D/g, '').slice(0, 14);
+            let formatted = digits;
+            if (digits.length > 12) {
+                formatted = `${digits.slice(0, 2)}.${digits.slice(2, 5)}.${digits.slice(5, 8)}/${digits.slice(8, 12)}-${digits.slice(12)}`;
+            } else if (digits.length > 8) {
+                formatted = `${digits.slice(0, 2)}.${digits.slice(2, 5)}.${digits.slice(5, 8)}/${digits.slice(8)}`;
+            } else if (digits.length > 5) {
+                formatted = `${digits.slice(0, 2)}.${digits.slice(2, 5)}.${digits.slice(5)}`;
+            } else if (digits.length > 2) {
+                formatted = `${digits.slice(0, 2)}.${digits.slice(2)}`;
+            }
+            input.value = formatted;
         }
 
         // Formatação monetária BRL (R$ 0,00)
@@ -1381,6 +1409,48 @@
                 }
 
                 container.appendChild(sectionTitle);
+
+                if (section.hasCompanyFields) {
+                    const empresaBox = document.createElement('div');
+                    empresaBox.className = 'empresa-ident-box';
+
+                    const nameField = document.createElement('div');
+                    nameField.className = 'empresa-field';
+                    const nameLabel = document.createElement('label');
+                    nameLabel.htmlFor = `sec_${secIndex}_empresa_nome`;
+                    nameLabel.textContent = 'Nome da Empresa:';
+                    const nameInput = document.createElement('input');
+                    nameInput.type = 'text';
+                    nameInput.id = `sec_${secIndex}_empresa_nome`;
+                    nameInput.name = `sec_${secIndex}_empresa_nome`;
+                    nameInput.className = 'empresa-input';
+                    nameInput.placeholder = 'Razão social da empresa...';
+                    nameInput.value = formData[`sec_${secIndex}_empresa_nome`] || '';
+                    nameField.appendChild(nameLabel);
+                    nameField.appendChild(nameInput);
+
+                    const cnpjField = document.createElement('div');
+                    cnpjField.className = 'empresa-field';
+                    const cnpjLabel = document.createElement('label');
+                    cnpjLabel.htmlFor = `sec_${secIndex}_empresa_cnpj`;
+                    cnpjLabel.textContent = 'CNPJ:';
+                    const cnpjInput = document.createElement('input');
+                    cnpjInput.type = 'text';
+                    cnpjInput.id = `sec_${secIndex}_empresa_cnpj`;
+                    cnpjInput.name = `sec_${secIndex}_empresa_cnpj`;
+                    cnpjInput.className = 'empresa-input';
+                    cnpjInput.placeholder = '00.000.000/0000-00';
+                    cnpjInput.maxLength = 18;
+                    cnpjInput.inputMode = 'numeric';
+                    cnpjInput.value = formData[`sec_${secIndex}_empresa_cnpj`] || '';
+                    cnpjInput.addEventListener('input', () => maskCNPJInput(cnpjInput));
+                    cnpjField.appendChild(cnpjLabel);
+                    cnpjField.appendChild(cnpjInput);
+
+                    empresaBox.appendChild(nameField);
+                    empresaBox.appendChild(cnpjField);
+                    container.appendChild(empresaBox);
+                }
 
                 const sectionAllowsDate = section.allowDate !== false;
 
@@ -2038,6 +2108,13 @@
 
             const cfg = checklistsConfig[currentChecklistKey];
             cfg.sections.forEach((section, secIndex) => {
+                if (section.hasCompanyFields) {
+                    const empNomeEl = document.getElementById(`sec_${secIndex}_empresa_nome`);
+                    const empCnpjEl = document.getElementById(`sec_${secIndex}_empresa_cnpj`);
+                    if (empNomeEl) formData[`sec_${secIndex}_empresa_nome`] = empNomeEl.value || '';
+                    if (empCnpjEl) formData[`sec_${secIndex}_empresa_cnpj`] = empCnpjEl.value || '';
+                }
+
                 const sectionAllowsDate = section.allowDate !== false;
                 section.items.forEach((item, itemIndex) => {
                     const inputId = `sec_${secIndex}_item_${itemIndex}`;
@@ -2284,6 +2361,19 @@
 
             let sectionsHTML = '';
             cfg.sections.forEach((section, secIndex) => {
+                let companyHTML = '';
+                if (section.hasCompanyFields) {
+                    const empNome = (formData[`sec_${secIndex}_empresa_nome`] || '').trim();
+                    const empCnpj = (formData[`sec_${secIndex}_empresa_cnpj`] || '').trim();
+                    if (empNome || empCnpj) {
+                        companyHTML = `<div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:4px;padding:6px 8px;margin-bottom:6px;font-size:10px;">
+                            ${empNome ? `<strong>Nome da Empresa:</strong> ${escapeHTML(empNome)}` : ''}
+                            ${empNome && empCnpj ? ' &nbsp;|&nbsp; ' : ''}
+                            ${empCnpj ? `<strong>CNPJ:</strong> ${escapeHTML(empCnpj)}` : ''}
+                        </div>`;
+                    }
+                }
+
                 let rows = '';
                 section.items.forEach((item, itemIndex) => {
                     const inputId = `sec_${secIndex}_item_${itemIndex}`;
@@ -2310,6 +2400,7 @@
 
                 sectionsHTML += `
                     <h2>${escapeHTML(section.section)}</h2>
+                    ${companyHTML}
                     <table>
                         <colgroup>
                             <col style="width: 72%;">
